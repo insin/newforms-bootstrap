@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<head>
+  <meta charset="UTF-8">
+  <title>BootstrapForm demo</title>
+  <script src="http://fb.me/react-0.12.1.js"></script>
+  <script src="http://fb.me/JSXTransformer-0.12.1.js"></script>
+  <script src="../../newforms/build/newforms.js"></script>
+  <script src="../dist/newforms-bootstrap.js"></script>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap-theme.min.css">
+</head>
+<body>
+<script type="text/jsx;harmony=true">void function() {
+'use strict'
+
+function cap(s) {
+  return s.charAt(0).toUpperCase() + s.slice(1)
+}
+
+var WEB_COLOURS = (
+  "|I don't know that!|AliceBlue|AntiqueWhite|Aqua|Aquamarine|Azure|Beige|Bis" +
+  'que|Black|BlanchedAlmond|Blue|BlueViolet|Brown|BurlyWood|CadetBlue|Chartre' +
+  'use|Chocolate|Coral|CornflowerBlue|Cornsilk|Crimson|Cyan|DarkBlue|DarkCyan' +
+  '|DarkGoldenRod|DarkGray|DarkGreen|DarkKhaki|DarkMagenta|DarkOliveGreen|Dar' +
+  'kOrange|DarkOrchid|DarkRed|DarkSalmon|DarkSeaGreen|DarkSlateBlue|DarkSlate' +
+  'Gray|DarkTurquoise|DarkViolet|DeepPink|DeepSkyBlue|DimGray|DodgerBlue|Fire' +
+  'Brick|FloralWhite|ForestGreen|Fuchsia|Gainsboro|GhostWhite|Gold|GoldenRod|' +
+  'Gray|Green|GreenYellow|HoneyDew|HotPink|IndianRed|Indigo|Ivory|Khaki|Laven' +
+  'der|LavenderBlush|LawnGreen|LemonChiffon|LightBlue|LightCoral|LightCyan|Li' +
+  'ghtGoldenRodYellow|LightGray|LightGreen|LightPink|LightSalmon|LightSeaGree' +
+  'n|LightSkyBlue|LightSlateGray|LightSteelBlue|LightYellow|Lime|LimeGreen|Li' +
+  'nen|Magenta|Maroon|MediumAquaMarine|MediumBlue|MediumOrchid|MediumPurple|M' +
+  'ediumSeaGreen|MediumSlateBlue|MediumSpringGreen|MediumTurquoise|MediumViol' +
+  'etRed|MidnightBlue|MintCream|MistyRose|Moccasin|NavajoWhite|Navy|OldLace|O' +
+  'live|OliveDrab|Orange|OrangeRed|Orchid|PaleGoldenRod|PaleGreen|PaleTurquoi' +
+  'se|PaleVioletRed|PapayaWhip|PeachPuff|Peru|Pink|Plum|PowderBlue|Purple|Red' +
+  '|RosyBrown|RoyalBlue|SaddleBrown|Salmon|SandyBrown|SeaGreen|SeaShell|Sienn' +
+  'a|Silver|SkyBlue|SlateBlue|SlateGray|Snow|SpringGreen|SteelBlue|Tan|Teal|T' +
+  'histle|Tomato|Turquoise|Violet|Wheat|White|WhiteSmoke|Yellow|YellowGreen'
+).split('|')
+
+var DemoForm = BootstrapForm.extend({
+  name: forms.CharField({label: 'Wwhat... is your name?',
+                         helpText: 'Note: Sir Robin and Sir Galahad are banned from the Form of Death'}),
+  quest: forms.CharField({label: 'Wwhat... is your quest?', widget: forms.Textarea}),
+  colour: forms.ChoiceField({label: 'What is your favourite (web) colour?', choices: WEB_COLOURS,
+                             helpText: "Note: King Arthur's favourite colour is Bisque"}),
+  capital: forms.CharField({label: 'What is the capital of Assyria?', helpText: 'Hint: View Source'}),
+  velocity: forms.FloatField({label: 'What is the air-speed velocity of an unladen swallow?', minValue: 0}),
+
+  cleanName(cb) {
+    var name = this.cleanedData.name
+    setTimeout(function() {
+      var error = null
+      if (/robin|galahad/i.test(name)) {
+        error = 'Sir ' + cap(/(robin|galahad)/i.exec(name)[1]) +' shall not pass!'
+      }
+      cb(null, error)
+    }, 1369)
+  },
+
+  cleanQuest() {
+    if (!/grail/i.test(this.cleanedData.quest)) {
+      throw forms.ValidationError('WHOOSH! (This is not a worthy quest!)')
+    }
+  },
+
+  cleanColour() {
+    if (this.cleanedData.colour == "I don't know that!") {
+      throw forms.ValidationError('WHOOSH!')
+    }
+  },
+
+  cleanCapital() {
+    if ('Assur|Nimrud|Dur Sarukin|Nineveh'.split('|').indexOf(this.cleanedData.capital) == -1) {
+      throw forms.ValidationError('WHOOSH! (View Source!)')
+    }
+  },
+
+  clean() {
+    var colour = this.cleanedData.colour
+    if (/arthur/i.test(this.cleanedData.name) && colour && colour != 'Bisque') {
+      throw forms.ValidationError("Imposter! King Arthur's favourite colour is Bisque! WHOOSH!")
+    }
+  }
+})
+
+var App = React.createClass({
+  getInitialState() {
+    return {
+      form: new DemoForm({onChange: this.forceUpdate.bind(this)})
+    , submitted: null
+    }
+  },
+
+  _onSubmit(e) {
+    e.preventDefault()
+    var form = this.state.form
+    if (form.isComplete()) {
+      this.setState({submitted: form.cleanedData})
+      return
+    }
+    form.validate((err, isValid, cleanedData) => {
+      if (isValid) {
+        this.setState({submitted: cleanedData})
+      }
+      else {
+        this.forceUpdate()
+      }
+    })
+  },
+
+  render() {
+    var form = this.state.form
+    return <div className="container">
+      <div className="row">
+        <h1>The Form of Death <small>(some <a href="https://www.youtube.com/watch?v=cV0tCphFMr8">Monty Python</a> knowledge required)</small></h1>
+        <p className="lead">
+          Stop! Who would submit the Form of Death must answer me these questions
+          three, ere the submit button enabled be.
+        </p>
+        <p>
+          A demo of default form rendering provided by <code>BootstrapForm</code>
+          from <a href="https://github.com/insin/newforms-bootstrap">newforms bootstrap</a>.
+        </p>
+      </div>
+      <div className="row">
+        <form onSubmit={this._onSubmit}>
+          {this.state.form.render()}
+          <button type="submit" className="btn btn-primary" disabled={!form.isComplete()}>
+            Submit the Form of Death
+          </button>
+        </form>
+      </div>
+      <div className="row">
+        {this.state.submitted && <div className="alert alert-success">
+          <strong>Submitted data</strong>
+          <pre>{JSON.stringify(this.state.submitted, null, 2)}</pre>
+        </div>}
+      </div>
+    </div>
+  }
+})
+
+React.render(<App/>, document.body)
+}()</script>
+</body>
