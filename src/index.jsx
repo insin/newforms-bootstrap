@@ -192,6 +192,11 @@ var BootstrapForm = Form.extend({
     rows.push.apply(rows, this.visibleFields().map(field =>
       <BootstrapField key={field.htmlName} field={field} spinner={this.spinner}/>
     ))
+    if (this.nonFieldPending()) {
+      rows.push(<span className="help-block">
+        <img src={this.spinner}/> Validating&hellip;
+      </span>)
+    }
     return rows
   }
 })
