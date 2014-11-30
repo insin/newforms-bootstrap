@@ -185,7 +185,7 @@ var BootstrapForm = Form.extend({
     var rows = []
     var formErrors = this.nonFieldErrors()
     if (formErrors.isPopulated()) {
-      rows.push(<div className="alert alert-danger has-error">
+      rows.push(<div key={this.addPrefix('__all__')} className="alert alert-danger has-error">
         {formErrors.messages().map(errorMessage)}
       </div>)
     }
@@ -199,7 +199,7 @@ var BootstrapForm = Form.extend({
       </div>)
     }
     if (this.nonFieldPending()) {
-      rows.push(<span className="help-block">
+      rows.push(<span key={this.addPrefix('__pending__')} className="help-block">
         <img src={this.spinner}/> Validating&hellip;
       </span>)
     }
