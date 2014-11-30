@@ -160,6 +160,8 @@ var BootstrapRadioInlineRenderer = RadioFieldRenderer.extend({
 })
 
 var BootstrapForm = Form.extend({
+  spinner: SPINNER,
+
   constructor: function BootstrapForm(kwargs) {
     Form.call(this, kwargs)
     // Fields have now been deep-cloned, so we can make any customisations
@@ -187,9 +189,9 @@ var BootstrapForm = Form.extend({
         {formErrors.messages().map(errorMessage)}
       </div>)
     }
-    rows.push.apply(rows, this.boundFields().map(field => {
-      return <BootstrapField key={field.htmlName} field={field}/>
-    }))
+    rows.push.apply(rows, this.visibleFields().map(field =>
+      <BootstrapField key={field.htmlName} field={field} spinner={this.spinner}/>
+    ))
     return rows
   }
 })
