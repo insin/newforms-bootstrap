@@ -1,6 +1,7 @@
 # newforms-bootstrap
 
-Provides `BootstrapForm`, which uses Bootstrap 3 classes for form layout.
+`BootstrapForm` for [newforms](https://guthub.com/insin/newforms), which renders
+using Bootstrap 3 classes for form layout.
 
 ## Demos
 
@@ -12,7 +13,23 @@ Provides `BootstrapForm`, which uses Bootstrap 3 classes for form layout.
 
 ## Install
 
-(coming soon)
+### Node.js (not available yet!)
+
+newforms-bootstrap can be used on the server, or bundled for the client using an
+npm-compatible packaging system such as [Browserify](http://browserify.org/) or
+[webpack](http://webpack.github.io/).
+
+```
+npm install newforms-bootstrap
+```
+
+### Browser bundle (not available yet!)
+
+The browser bundle exposes a global `BootstrapForm` variable and expects to
+find global `React` ([React](http://facebook.github.io/react/)) and `forms`
+([newforms](https://guthub.com/insin/newforms)) variables to work with.
+
+You can find them in the [/dist directory](https://github.com/insin/newforms-bootstrap/tree/master/dist).
 
 ## Usage
 
@@ -137,6 +154,7 @@ widgets as equally-distributed columns in a Bootstrap grid row.
 ## TODO
 
 * `BootstrapForm.layout` configuration
+  * Make use of `has-error`/`has-success` highlighting configurable
   * Horizontal layout with configuratble breakpoints
   * Configurable grid layout similar to
     [Custom Form Layour from newforms-examples](https://github.com/insin/newforms-examples#custom-form-layout-source)

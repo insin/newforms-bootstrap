@@ -61,9 +61,9 @@ gulp.task('bundle-js', ['clean-dist', 'lint-js'], function() {
 
   if (gutil.env.production) {
     stream = stream
-      .pipe(rename('bundle-js.min.js'))
+      .pipe(rename('newforms-bootstrap.min.js'))
       .pipe(streamify(uglify()))
-      .pipe(streamify(header(srcHeader, {pkg: pkg, dev: dev})))
+      .pipe(streamify(header(distHeader, {pkg: pkg, dev: dev})))
       .pipe(gulp.dest('./dist'))
   }
 
