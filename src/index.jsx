@@ -56,26 +56,30 @@ var BootstrapField = React.createClass({
     var field = this.props.field
     var status = field.status()
     var isBooleanField = field.field.constructor === BooleanField
-
-    // Always show help text for empty fields, regardless of status
-    var showHelpText = field.helpText && (field.isEmpty() || status == 'default')
+    var isFileField = field.field instanceof FileField
     var containerClasses = cx({
       'checkbox': isBooleanField
     , 'form-group': !isBooleanField
     , 'has-error': status == 'error'
     , 'has-success': status == 'valid'
     })
+    var widgetAttrs = {attrs: {className: cx({
+      'form-control': !isFileField  &&
+                      !(field.field.widget instanceof RadioSelect) &&
+                      !(field.field.widget instanceof CheckboxSelectMultiple)
+    })}}
+    // Always show help text for empty fields, regardless of status
+    var showHelpText = field.helpText && (field.isEmpty() || status == 'default')
 
     return <div className={containerClasses}>
       {!isBooleanField && field.labelTag({attrs: {className: 'control-label'}})}
-      {!isBooleanField && field.asWidget({attrs: {className: cx({
-        'form-control': !(field.field instanceof FileField) &&
-                        !(field.field.widget instanceof RadioSelect) &&
-                        !(field.field.widget instanceof CheckboxSelectMultiple)
-      })}})}
+      {!isBooleanField && !isFileField && field.asWidget(widgetAttrs)}
       {isBooleanField && <label htmlFor={field.idForLabel()}>
         {field.asWidget()} {field.label}
       </label>}
+      {isFileField && <div>
+        {field.asWidget(widgetAttrs)}
+      </div>}
       {showHelpText && field.helpTextTag({attrs: {className: 'help-block'}})}
       {status == 'pending' && <span className="help-block">
         <img src={this.props.spinner}/> Validating&hellip;
