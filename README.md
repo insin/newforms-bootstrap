@@ -27,9 +27,9 @@ npm install newforms-bootstrap
 
 The browser bundle exposes a global `BootstrapForm` variable and expects to
 find global `React` ([React](http://facebook.github.io/react/)) and `forms`
-([newforms](https://guthub.com/insin/newforms)) variables to work with.
+([newforms](https://github.com/insin/newforms)) variables to work with.
 
-You can find them in the [/dist directory](https://github.com/insin/newforms-bootstrap/tree/master/dist).
+You can find it in the [/dist directory](https://github.com/insin/newforms-bootstrap/tree/master/dist).
 
 ## Usage
 
