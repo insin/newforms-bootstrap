@@ -89,9 +89,12 @@ combinations of default fields and widgets.
 
 * `BootstrapForm.CheckboxRenderer` - renders choices as a list of checkboxes;
    supports choice categories.
-* `BootstrapForm.CheckboxInlineRenderer` - renders flat choices as inline checkboxes
-* `BootstrapForm.RadioRenderer`
-* `BootstrapForm.RadioInlineRenderer`
+* `BootstrapForm.CheckboxInlineRenderer` - renders flat choices as inline
+   checkboxes
+* `BootstrapForm.RadioRenderer` - renders choices as a list of radio buttons;
+   supports choice categories
+* `BootstrapForm.RadioInlineRenderer` - renders flat choices as inline radio
+   buttons
 
 Use the inline renderers manually if you want to configure fields to render
 inline checkbox or radio inputs using  Bootstrap 3's `checkbox-inline` and
