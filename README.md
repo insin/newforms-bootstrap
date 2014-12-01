@@ -7,8 +7,8 @@ Provides `BootstrapForm`, which uses Bootstrap 3 classes for form layout.
 * [The Form of Death](http://insin.github.io/newforms-bootstrap/index.html) - a
   form with a range of validation defined, including async field validation and
   whole-form validation.
-* [All Default Fields](http://insin.github.io/newforms-bootstrap/allfields.html)
-  - a form usiong all the default newforms Fields and Widgets.
+* [All Default Fields](http://insin.github.io/newforms-bootstrap/allfields.html) -
+  a form usiong all the default newforms Fields and Widgets.
 
 ## Install
 
