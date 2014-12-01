@@ -2,6 +2,14 @@
 
 Provides `BootstrapForm`, which uses Bootstrap 3 classes for form layout.
 
+## Demos
+
+* [The Form of Death](http://insin.github.io/newforms-bootstrap/index.html) - a
+  form with a range of validation defined, including async field validation and
+  whole-form validation.
+* [All Default Fields](http://insin.github.io/newforms-bootstrap/allfields.html)
+  - a form usiong all the default newforms Fields and Widgets.
+
 ## Install
 
 (coming soon)
@@ -86,5 +94,16 @@ and `radio-inline` classes, respectively:
 
 * `BootstrapForm.CheckboxInlineRenderer`
 * `BootstrapForm.RadioInlineRenderer`
+
+For example:
+
+```javascript
+var StuffForm = BootstrapForm.extend({
+  stuff: forms.MultipleChoiceField({
+    choices: [1, 2, 3, 4, 5],
+    widget: forms.CheckboxSelectMultiple({renderer: BootstrapForm.CheckboxInlineRenderer})
+  })
+})
+```
 
 ## MIT Licensed
