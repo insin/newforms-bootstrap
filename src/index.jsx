@@ -167,6 +167,10 @@ var BootstrapForm = Form.extend({
     // Fields have now been deep-cloned, so we can make any customisations
     // necessary for Bootstrap without affecting other places the same Field
     // instance may be used.
+    this._patchFields()
+  },
+
+  _patchFields() {
     var fieldNames = Object.keys(this.fields)
     for (var i = 0, l = fieldNames.length; i < l ; i++) {
       var field = this.fields[fieldNames[i]]
@@ -190,7 +194,7 @@ var BootstrapForm = Form.extend({
       </div>)
     }
     rows.push.apply(rows, this.visibleFields().map(field =>
-      <BootstrapField key={field.htmlName} field={field} spinner={this.spinner}/>
+      <BootstrapField key={field.htmlName} field={field} spinner={this.spinner || SPINNER}/>
     ))
     var hiddenFields = this.hiddenFields()
     if (hiddenFields.length > 0) {
@@ -200,12 +204,20 @@ var BootstrapForm = Form.extend({
     }
     if (this.nonFieldPending()) {
       rows.push(<span key={this.addPrefix('__pending__')} className="help-block">
-        <img src={this.spinner}/> Validating&hellip;
+        <img src={this.spinner || SPINNER}/> Validating&hellip;
       </span>)
     }
     return rows
   }
 })
+
+BootstrapForm.render = function(form) {
+  if (!form.__patchedByBootstrapForm) {
+    BootstrapForm.prototype._patchFields.call(form)
+    form.__patchedByBootstrapForm = true
+  }
+  return BootstrapForm.prototype.render.call(form)
+}
 
 extend(BootstrapForm, {
   CheckboxRenderer: BootstrapCheckboxRenderer
