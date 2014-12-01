@@ -76,13 +76,13 @@ time it is rendered this way.
 
 ### Choice field renderers
 
-If your form has a `ChoiceField` or `MultipleChoiceField` which uses the default
+If your form has a `ChoiceField` or `MultipleChoiceField` which uses the
 `RadioSelect` or `CheckboxSelectMultiple` widget, `BootstrapForm` will
 automatically replace its choice renderer with a Bootstrap-compatible renderer.
 
-THe following renderers are also available if you want to configure these fields
-to render checkbox or radio inputs which use Bootstrap 3's `checkbox-inline` and
-`radio-inline` classes, respectively:
+The following renderers are also available if you want to configure these fields
+to render inline checkbox or radio inputs using  Bootstrap 3's `checkbox-inline`
+and `radio-inline` classes, respectively:
 
 * `BootstrapForm.CheckboxInlineRenderer`
 * `BootstrapForm.RadioInlineRenderer`
