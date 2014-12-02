@@ -192,7 +192,7 @@ var BootstrapForm = Form.extend({
       else if (field instanceof MultiValueField) {
         if (field.fields.length < 5 &&
             field.widget.formatOutput === MultiWidget.prototype.formatOutput) {
-          var colClass = 'col-md-' + (12 / field.fields.length)
+          var colClass = 'col-sm-' + (12 / field.fields.length)
           field.widget.formatOutput = function(widgets) {
             return <div className="row">
               {widgets.map(widget => <div className={colClass}>{widget}</div>)}
