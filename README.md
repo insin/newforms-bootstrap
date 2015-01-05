@@ -1,7 +1,7 @@
 # newforms-bootstrap
 
 A `BootstrapForm` component for rendering a [newforms](https://guthub.com/insin/newforms)
-From, using Bootstrap 3 classes and conventions for form layout.
+Form, using Bootstrap 3 classes and conventions for form layout.
 
 ## Demos
 
