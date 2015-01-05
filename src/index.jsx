@@ -164,78 +164,86 @@ var BootstrapRadioInlineRenderer = RadioFieldRenderer.extend({
   }
 })
 
-var BootstrapForm = Form.extend({
-  spinner: SPINNER,
-
-  constructor: function BootstrapForm(kwargs) {
-    Form.call(this, kwargs)
-    // Fields have now been deep-cloned, so we can make any customisations
-    // necessary for Bootstrap without affecting other places the same Field
-    // instance may be used.
-    this._patchFields()
-  },
-
-  _patchFields() {
-    var fieldNames = Object.keys(this.fields)
-    for (var i = 0, l = fieldNames.length; i < l ; i++) {
-      var field = this.fields[fieldNames[i]]
-      if (field.widget instanceof CheckboxSelectMultiple) {
-        if (field.widget.renderer === CheckboxFieldRenderer) {
-          field.widget.renderer = BootstrapCheckboxRenderer
+var BootstrapForm = React.createClass({
+  statics: {
+    patchFields(form) {
+      if (form.__patchedByBootstrapForm) { return }
+      var fieldNames = Object.keys(form.fields)
+      for (var i = 0, l = fieldNames.length; i < l ; i++) {
+        var field = form.fields[fieldNames[i]]
+        if (field.widget instanceof CheckboxSelectMultiple) {
+          if (field.widget.renderer === CheckboxFieldRenderer) {
+            field.widget.renderer = BootstrapCheckboxRenderer
+          }
         }
-      }
-      else if (field.widget instanceof RadioSelect) {
-        if (field.widget.renderer === RadioFieldRenderer) {
-          field.widget.renderer = BootstrapRadioRenderer
+        else if (field.widget instanceof RadioSelect) {
+          if (field.widget.renderer === RadioFieldRenderer) {
+            field.widget.renderer = BootstrapRadioRenderer
+          }
         }
-      }
-      else if (field instanceof MultiValueField) {
-        if (field.fields.length < 5 &&
-            field.widget.formatOutput === MultiWidget.prototype.formatOutput) {
-          var colClass = 'col-sm-' + (12 / field.fields.length)
-          field.widget.formatOutput = function(widgets) {
-            return <div className="row">
-              {widgets.map(widget => <div className={colClass}>{widget}</div>)}
-            </div>
+        else if (field instanceof MultiValueField) {
+          if (field.fields.length < 5 &&
+              field.widget.formatOutput === MultiWidget.prototype.formatOutput) {
+            var colClass = 'col-sm-' + (12 / field.fields.length)
+            field.widget.formatOutput = function(widgets) {
+              return <div className="row">
+                {widgets.map(widget => <div className={colClass}>{widget}</div>)}
+              </div>
+            }
           }
         }
       }
     }
   },
 
+  propTypes: {
+    form: React.PropTypes.instanceOf(Form).isRequired,
+    spinner: React.PropTypes.string
+  },
+
+  getDefaultProps() {
+    return {
+      spinner: SPINNER
+    }
+  },
+
   render() {
+    var form = this.props.form
+    if (!form.__patchedByBootstrapForm) {
+      BootstrapForm.patchFields(form)
+      form.__patchedByBootstrapForm = true
+    }
+    return <div>
+      {this.renderRows()}
+    </div>
+  },
+
+  renderRows() {
     var rows = []
-    var formErrors = this.nonFieldErrors()
+    var form = this.props.form
+    var formErrors = form.nonFieldErrors()
     if (formErrors.isPopulated()) {
-      rows.push(<div key={this.addPrefix('__all__')} className="alert alert-danger has-error">
+      rows.push(<div key={form.addPrefix('__all__')} className="alert alert-danger has-error">
         {formErrors.messages().map(errorMessage)}
       </div>)
     }
-    rows.push.apply(rows, this.visibleFields().map(field =>
-      <BootstrapField key={field.htmlName} field={field} spinner={this.spinner || SPINNER}/>
+    rows.push.apply(rows, form.visibleFields().map(field =>
+      <BootstrapField key={field.htmlName} field={field} spinner={this.props.spinner}/>
     ))
-    var hiddenFields = this.hiddenFields()
+    var hiddenFields = form.hiddenFields()
     if (hiddenFields.length > 0) {
-      rows.push(<div key={this.addPrefix('__hiddenFields__')} style={{display: 'none'}}>
+      rows.push(<div key={form.addPrefix('__hiddenFields__')} style={{display: 'none'}}>
         {hiddenFields.map(field => field.render())}
       </div>)
     }
-    if (this.nonFieldPending()) {
-      rows.push(<span key={this.addPrefix('__pending__')} className="help-block">
-        <img src={this.spinner || SPINNER}/> Validating&hellip;
+    if (form.nonFieldPending()) {
+      rows.push(<span key={form.addPrefix('__pending__')} className="help-block">
+        <img src={this.props.spinner}/> Validating&hellip;
       </span>)
     }
     return rows
   }
 })
-
-BootstrapForm.render = function(form) {
-  if (!form.__patchedByBootstrapForm) {
-    BootstrapForm.prototype._patchFields.call(form)
-    form.__patchedByBootstrapForm = true
-  }
-  return BootstrapForm.prototype.render.call(form)
-}
 
 extend(BootstrapForm, {
   CheckboxRenderer: BootstrapCheckboxRenderer

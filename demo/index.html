@@ -2,8 +2,8 @@
 <head>
   <meta charset="UTF-8">
   <title>The Form of Death | newforms-bootstrap</title>
-  <script src="http://fb.me/react-0.12.1.js"></script>
-  <script src="http://fb.me/JSXTransformer-0.12.1.js"></script>
+  <script src="http://fb.me/react-with-addons-0.12.2.js"></script>
+  <script src="http://fb.me/JSXTransformer-0.12.2.js"></script>
   <script src="../../newforms/build/newforms.js"></script>
   <script src="../dist/newforms-bootstrap.js"></script>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
@@ -39,7 +39,7 @@ var WEB_COLOURS = (
   'histle|Tomato|Turquoise|Violet|Wheat|White|WhiteSmoke|Yellow|YellowGreen'
 ).split('|')
 
-var DemoForm = BootstrapForm.extend({
+var DemoForm = forms.Form.extend({
   name: forms.CharField({label: 'Wwhat... is your name?',
                          helpText: 'Note: Sir Robin and Sir Galahad are banned from the Form of Death'}),
   quest: forms.CharField({label: 'Wwhat... is your quest?', widget: forms.Textarea}),
@@ -88,14 +88,13 @@ var DemoForm = BootstrapForm.extend({
 var App = React.createClass({
   getInitialState() {
     return {
-      form: new DemoForm({onChange: this.forceUpdate.bind(this)})
-    , submitted: null
+      submitted: null
     }
   },
 
   _onSubmit(e) {
     e.preventDefault()
-    var form = this.state.form
+    var form = this.refs.demoForm.getForm()
     if (form.isComplete()) {
       this.setState({submitted: form.cleanedData})
       return
@@ -104,14 +103,10 @@ var App = React.createClass({
       if (isValid) {
         this.setState({submitted: cleanedData})
       }
-      else {
-        this.forceUpdate()
-      }
     })
   },
 
   render() {
-    var form = this.state.form
     return <div className="container">
       <div className="row">
         <h1>The Form of Death <small>(some <a href="https://www.youtube.com/watch?v=cV0tCphFMr8">Monty Python</a> knowledge required)</small></h1>
@@ -126,8 +121,10 @@ var App = React.createClass({
       </div>
       <div className="row">
         <form onSubmit={this._onSubmit}>
-          {this.state.form.render()}
-          <button type="submit" className="btn btn-primary" disabled={!form.isComplete()}>
+          <forms.RenderForm form={DemoForm} ref="demoForm">
+            <BootstrapForm/>
+          </forms.RenderForm>
+          <button type="submit" className="btn btn-primary">
             Submit the Form of Death
           </button>
         </form>

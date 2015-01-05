@@ -2,8 +2,8 @@
 <head>
   <meta charset="UTF-8">
   <title>All Default Fields &amp; Widgets | newforms-bootstrap</title>
-  <script src="http://fb.me/react-0.12.1.js"></script>
-  <script src="http://fb.me/JSXTransformer-0.12.1.js"></script>
+  <script src="http://fb.me/react-with-addons-0.12.2.js"></script>
+  <script src="http://fb.me/JSXTransformer-0.12.2.js"></script>
   <script src="../../newforms/build/newforms.js"></script>
   <script src="../dist/newforms-bootstrap.js"></script>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
@@ -39,7 +39,7 @@ function FakeFile(name, url) {
 }
 FakeFile.prototype.toString = function() { return this.name }
 
-var AllFieldsForm = BootstrapForm.extend({
+var AllFieldsForm = forms.Form.extend({
   CharField: forms.CharField({minLength: 5, maxLength: 10, helpText: {__html: 'Any text between 5 and 10 characters long.<br>(Try "Answer" then the Integer field below)'}}),
   CharFieldWithTextareaWidget: forms.CharField({label: 'Char field (Textarea widget)', widget: forms.Textarea}),
   CharFieldWithPasswordWidget: forms.CharField({label: 'Char field (PasswordInput widget)', widget: forms.PasswordInput}),
@@ -92,32 +92,28 @@ var AllFieldsForm = BootstrapForm.extend({
 var App = React.createClass({
   getInitialState() {
     return {
-      form: new AllFieldsForm({onChange: this.forceUpdate.bind(this)})
-    , submitted: null
+      submitted: null
     }
   },
 
   _onSubmit(e) {
     e.preventDefault()
-    var form = this.state.form
-    var isValid = form.validate()
-    if (isValid) {
+    var form = this.refs.allFieldsForm.getForm()
+    if (form.validate()) {
       this.setState({submitted: form.cleanedData})
-    }
-    else {
-      this.forceUpdate()
     }
   },
 
   render() {
-    var form = this.state.form
     return <div className="container">
       <div className="row">
         <h1>All Default Fields &amp; Widgets <small>(rendered with <a href="https://github.com/insin/newforms-bootstrap">newforms-bootstrap</a>'s <code>BootstrapForm</code>)</small></h1>
       </div>
       <div className="row">
         <form onSubmit={this._onSubmit}>
-          {this.state.form.render()}
+          <forms.RenderForm form={AllFieldsForm} ref="allFieldsForm">
+            <BootstrapForm/>
+          </forms.RenderForm>
           <button type="submit" className="btn btn-primary">
             Submit
           </button>

@@ -1,7 +1,7 @@
 # newforms-bootstrap
 
-`BootstrapForm` for [newforms](https://guthub.com/insin/newforms), which renders
-using Bootstrap 3 classes for form layout.
+A `BootstrapForm` component for rendering a [newforms](https://guthub.com/insin/newforms)
+From, using Bootstrap 3 classes and conventions for form layout.
 
 ## Demos
 
@@ -33,20 +33,11 @@ You can find it in the [/dist directory](https://github.com/insin/newforms-boots
 
 ## Usage
 
-Either extend `BootstrapForm` instead of the default newforms `Form` and use the
-form as usual...
+Pass `BootstrapForm` a Form instance as a `form` prop.
 
-```javascript
-var forms = require('newforms')
-var BootstrapForm = require('newforms-bootstrap')
-
-var SignupForm = BootstrapForm.extend({
-  username: forms.CharField({maxLength: 20}),
-  // ...
-})
-```
-
-...or just call BootstrapForm.render() on any Form instance:
+Any component which accepts a `form` prop can be used as a custom renderer for
+newforms' `RenderForm` component, which can also handle creation of a form
+instance for you:
 
 ```javascript
 var SignupForm = forms.Form.extend({
@@ -55,17 +46,18 @@ var SignupForm = forms.Form.extend({
 })
 
 var Signup = React.createClass({
-  getInitialState() {
-    return {
-      form: new SignupForm()
+  _onSubmit() {
+    var form = this.refs.signupForm.getForm()
+    if (form.validate()) {
+      // ...
     }
   },
 
-  // ...
-
   render() {
     return <form onSubmit={this._onSubmit}>
-      {BootstrapForm.render(this.state.form)}
+      <forms.RenderForm form={SignupForm} ref="signupForm">
+        <BootstrapForm/>
+      </forms.RenderForm>
       <button>Sign Up</button>
     </form>
   }
@@ -74,12 +66,9 @@ var Signup = React.createClass({
 
 ## API
 
-### `BootstrapForm.extend(...)`
+### `BootstrapForm` props
 
-Creates a new `Form` constructor whose prototype has a default `render()` method
-which uses Bootstrap 3 structures and CSS classes for layout. This is otherwise
-ths same as newforms' `Form.extend()`, but `BootstrapForm` supports the following
-additional properties:
+* `form` - a `Form` instance.
 
 * `spinner` - the URL or [data URI](http://en.wikipedia.org/wiki/Data_URI_scheme)
   for an image to be displayed when async validation is pending for a field or
@@ -89,14 +78,6 @@ additional properties:
   transparent background:
 
   ![spinner](https://github.com/insin/newforms-bootstrap/raw/master/spinner.gif "Default async validation spinner")
-
-### `BootstrapForm.render(form)`
-
-Renders any form instance using Bootstrap 3 structures and CSS classes for
-layout.
-
-The additional properties documented for `BootstrapForm` can also be added to
-your form if you need to configure rendering.
 
 ### Bootstrap-compatible choice field renderers
 
@@ -118,7 +99,7 @@ inline checkbox or radio inputs using  Bootstrap 3's `checkbox-inline` and
 `radio-inline` classes, respectively:
 
 ```javascript
-var StuffForm = BootstrapForm.extend({
+var StuffForm = forms.Form.extend({
   stuff: forms.MultipleChoiceField({
     choices: [1, 2, 3, 4, 5],
     widget: forms.CheckboxSelectMultiple({renderer: BootstrapForm.CheckboxInlineRenderer})
@@ -129,10 +110,10 @@ var StuffForm = BootstrapForm.extend({
 ## Field / Widget Patching
 
 `BootstrapForm` patches the widgets of certain fields for Bootstrap-compatible
-output at instance construction time.
+output.
 
-`BootstrapForm.render()` will make these changes the first time it renders a
-form - patching will only affect the form instance it was given.
+These changes will be made the first time it renders a form - patching will only
+affect the form instance it was given.
 
 ### `ChoiceField` with `RadioSelect`
 
@@ -157,6 +138,7 @@ widgets as equally-distributed columns in a Bootstrap grid row.
   * Make use of `has-error`/`has-success` highlighting configurable
   * Horizontal layout with configuratble breakpoints
   * Configurable grid layout similar to
-    [Custom Form Layour from newforms-examples](https://github.com/insin/newforms-examples#custom-form-layout-source)
+    [Custom Form Layout from newforms-examples](https://github.com/insin/newforms-examples#custom-form-layout-source)
+    / [newforms-gridforms](https://github.com/insin/newforms-gridforms)
 
 ## MIT Licensed
