@@ -13,7 +13,7 @@ From, using Bootstrap 3 classes and conventions for form layout.
 
 ## Install
 
-### Node.js (not available yet!)
+### Node.js
 
 newforms-bootstrap can be used on the server, or bundled for the client using an
 npm-compatible packaging system such as [Browserify](http://browserify.org/) or
@@ -23,7 +23,7 @@ npm-compatible packaging system such as [Browserify](http://browserify.org/) or
 npm install newforms-bootstrap
 ```
 
-### Browser bundle (not available yet!)
+### Browser bundle
 
 The browser bundle exposes a global `BootstrapForm` variable and expects to
 find global `React` ([React](http://facebook.github.io/react/)) and `forms`
