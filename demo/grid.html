@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<head>
+  <meta charset="UTF-8">
+  <title>Grid Components | newforms-bootstrap</title>
+  <script src="http://fb.me/react-with-addons-0.12.2.js"></script>
+  <script src="http://fb.me/JSXTransformer-0.12.2.js"></script>
+  <script src="../../newforms/build/newforms.js"></script>
+  <script src="../dist/newforms-bootstrap.js"></script>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap-theme.min.css">
+</head>
+<body>
+<script type="text/jsx;harmony=true">void function() {
+'use strict'
+
+var {Col, Container, Row, Field} = BootstrapForm
+
+var ProductForm = forms.Form.extend({
+  productName: forms.CharField(),
+  tags: forms.CharField(),
+  vendor: forms.ChoiceField({choices: ['Vendor 1', 'Vendor 2']}),
+  productType: forms.ChoiceField({choices: ['Product 1', 'Product 2']}),
+  productDescription: forms.CharField({widget: forms.Textarea}),
+  sku: forms.CharField(),
+  initialStockLevel: forms.IntegerField({minValue: 0}),
+  costPrice: forms.DecimalField({minValue: 0, decimalPlaces: 2}),
+  wholesalePrice: forms.DecimalField({minValue: 0, decimalPlaces: 2}),
+  retailPrice: forms.DecimalField({minValue: 0, decimalPlaces: 2})
+})
+
+var App = React.createClass({
+  _onSubmit(e) {
+    e.preventDefault()
+    this.refs.productForm.getForm().validate()
+  },
+
+  render() {
+    return <div className="container">
+      <h1><a href="https://github.com/insin/newforms-bootstrap">newforms-bootstrap</a> Grid Components</h1>
+      <form onSubmit={this._onSubmit}>
+        <forms.RenderForm form={ProductForm} ref="productForm">
+          <Container>
+            <Row>
+              <Field name="productName" md="8"/>
+              <Field name="tags" md="4"/>
+            </Row>
+            <Row>
+              <Field name="vendor" md="6"/>
+              <Field name="productType" md="6"/>
+            </Row>
+            <Row>
+              <Field name="productDescription" md="12"/>
+            </Row>
+            <Row>
+              <Col md="2">
+                I'm just a regular column.
+              </Col>
+              <Field name="sku" md="2"/>
+              <Field name="initialStockLevel" md="2"/>
+              <Field name="costPrice" md="2"/>
+              <Field name="wholesalePrice" md="2"/>
+              <Field name="retailPrice" md="2"/>
+            </Row>
+          </Container>
+        </forms.RenderForm>
+        <button className="btn btn-primary">Submit</button>
+      </form>
+    </div>
+  }
+})
+
+
+React.render(<App/>, document.body)
+}()</script>
+</body>

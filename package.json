@@ -1,7 +1,7 @@
 {
   "name": "newforms-bootstrap",
   "description": "Bootstrap integration for newforms",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "main": "./lib/index.js",
   "standalone": "BootstrapForm",
   "homepage": "https://github.com/insin/newforms-bootstrap",
@@ -34,7 +34,7 @@
     "watch": "gulp"
   },
   "browserify-shim": {
-    "react": "global:React",
+    "react/addons": "global:React",
     "newforms": "global:forms"
   },
   "repository": {

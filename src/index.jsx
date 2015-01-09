@@ -1,6 +1,7 @@
 'use strict';
 
-var React = require('react')
+var React = require('react/addons')
+var cloneWithProps = React.addons.cloneWithProps
 
 var {
   BooleanField, BoundField, CheckboxChoiceInput, CheckboxFieldRenderer,
@@ -164,6 +165,13 @@ var BootstrapRadioInlineRenderer = RadioFieldRenderer.extend({
   }
 })
 
+function patchForm(form) {
+  if (!form.__patchedByBootstrapForm) {
+    BootstrapForm.patchFields(form)
+    form.__patchedByBootstrapForm = true
+  }
+}
+
 var BootstrapForm = React.createClass({
   statics: {
     patchFields(form) {
@@ -208,11 +216,7 @@ var BootstrapForm = React.createClass({
   },
 
   render() {
-    var form = this.props.form
-    if (!form.__patchedByBootstrapForm) {
-      BootstrapForm.patchFields(form)
-      form.__patchedByBootstrapForm = true
-    }
+    patchForm(this.props.form)
     return <div>
       {this.renderRows()}
     </div>
@@ -245,11 +249,106 @@ var BootstrapForm = React.createClass({
   }
 })
 
+var Container = React.createClass({
+  propTypes: {
+    fluid: React.PropTypes.bool
+  },
+
+  getDefaultProps() {
+    return {
+      fluid: false
+    }
+  },
+
+  render() {
+    patchForm(this.props.form)
+    return <div className={cx('container', {'fluid': this.props.fluid})}>
+      {React.Children.map(this.props.children, child => cloneWithProps(child, {form: this.props.form}))}
+    </div>
+  }
+})
+
+var Row = React.createClass({
+  render() {
+    return <div className="row">
+      {React.Children.map(this.props.children, child => cloneWithProps(child, {form: this.props.form}))}
+    </div>
+  }
+})
+
+var stringOrNumberProp = React.PropTypes.oneOf([
+  React.PropTypes.number
+, React.PropTypes.string
+])
+
+var ColMixin = {
+  propTypes: {
+    xs: stringOrNumberProp
+  , sm: stringOrNumberProp
+  , md: stringOrNumberProp
+  , lg: stringOrNumberProp
+  , xsOffset: stringOrNumberProp
+  , smOffset: stringOrNumberProp
+  , mdOffset: stringOrNumberProp
+  , lgOffset: stringOrNumberProp
+  , __all__: function(props, propName, componentName) {
+      if (!props.xs && !props.sm && !props.md && !props.lg) {
+        return new Error(
+          `Invalid props for \`${componentName}\, column size must be specified.`
+        )
+      }
+    }
+  },
+
+  getColClassName() {
+    var props = this.props
+    var classNames = {}
+    classNames[`col-xs-${props.xs}`] = !!props.xs
+    classNames[`col-sm-${props.sm}`] = !!props.sm
+    classNames[`col-md-${props.md}`] = !!props.md
+    classNames[`col-lg-${props.lg}`] = !!props.lg
+    classNames[`col-xs-offset-${props.xsOffset}`] = !!props.xsOffset
+    classNames[`col-sm-offset-${props.smOffset}`] = !!props.smOffset
+    classNames[`col-md-offset-${props.mdOffset}`] = !!props.mdOffset
+    classNames[`col-lg-offset-${props.lgOffset}`] = !!props.lgOffset
+    return cx(classNames)
+  }
+}
+
+var Col = React.createClass({
+  mixins: [ColMixin],
+
+  render() {
+    return <div className={this.getColClassName()}>
+      {this.props.children}
+    </div>
+  }
+})
+
+var Field = React.createClass({
+  mixins: [ColMixin],
+
+  propTypes: {
+    name: React.PropTypes.string.isRequired
+  },
+
+  render() {
+    var field = this.props.form.boundField(this.props.name)
+    return <div className={this.getColClassName()}>
+      <BootstrapField key={field.htmlName} field={field}/>
+    </div>
+  }
+})
+
 extend(BootstrapForm, {
-  CheckboxRenderer: BootstrapCheckboxRenderer
-, CheckboxInlineRenderer: BootstrapCheckboxInlineRenderer
-, RadioRenderer: BootstrapRadioRenderer
+  CheckboxInlineRenderer: BootstrapCheckboxInlineRenderer
+, CheckboxRenderer: BootstrapCheckboxRenderer
+, Col
+, Container
+, Field
 , RadioInlineRenderer: BootstrapRadioInlineRenderer
+, RadioRenderer: BootstrapRadioRenderer
+, Row
 })
 
 module.exports = BootstrapForm

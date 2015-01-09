@@ -64,6 +64,39 @@ var Signup = React.createClass({
 })
 ```
 
+To render a form as a Bootstrap grid, you can use the provided grid components:
+
+```javascript
+var {Col, Container, Row, Field} = BootstrapForm
+```
+```html
+<forms.RenderForm form={ProductForm} ref="productForm">
+  <Container>
+    <Row>
+      <Field name="productName" md="8"/>
+      <Field name="tags" md="4"/>
+    </Row>
+    <Row>
+      <Field name="vendor" md="6"/>
+      <Field name="productType" md="6"/>
+    </Row>
+    <Row>
+      <Field name="productDescription" md="12"/>
+    </Row>
+    <Row>
+      <Col md="2">
+        I'm just a regular column.
+      </Col>
+      <Field name="sku" md="2"/>
+      <Field name="initialStockLevel" md="2"/>
+      <Field name="costPrice" md="2"/>
+      <Field name="wholesalePrice" md="2"/>
+      <Field name="retailPrice" md="2"/>
+    </Row>
+  </Container>
+</forms.RenderForm>
+```
+
 ## API
 
 ### `BootstrapForm` props
@@ -107,6 +140,57 @@ var StuffForm = forms.Form.extend({
 })
 ```
 
+## Grid Components
+
+### `Container`
+
+Renders a container.
+
+#### `Container` props
+
+* `form`: `Form` - the `Form` instance to be rendered.
+
+* `fluid`: `Boolean` (default: `false`) - if `true`, the container will have the
+  `.container-fluid` class, otherwise it will be a `.container`
+
+### `Row`
+
+Renders a `.row`.
+
+### `Col`
+
+Renders a column, with whatever content you provide.
+
+#### `Col` props
+
+Column sizing props can be passed as a `String` or `Number`.
+
+At least one of the following sizing props must be give to define the column's
+width:
+
+* `xs`
+* `sm`
+* `md`
+* `lg`
+
+Additionally, the column's offset can be specified with the following props:
+
+* `xsOffset`
+* `smOffset`
+* `mdOffset`
+* `lgOffset`
+
+### `Field`
+
+Renders a column containing a named form field.
+
+#### `Field` props
+
+`Field` is a specialisation of `Col`, so it accepts all the sizing/offset props
+described above plus the following:
+
+* `name`: `String` - the name of the field to be rendered
+
 ## Field / Widget Patching
 
 `BootstrapForm` patches the widgets of certain fields for Bootstrap-compatible
@@ -137,8 +221,5 @@ widgets as equally-distributed columns in a Bootstrap grid row.
 * `BootstrapForm.layout` configuration
   * Make use of `has-error`/`has-success` highlighting configurable
   * Horizontal layout with configuratble breakpoints
-  * Configurable grid layout similar to
-    [Custom Form Layout from newforms-examples](https://github.com/insin/newforms-examples#custom-form-layout-source)
-    / [newforms-gridforms](https://github.com/insin/newforms-gridforms)
 
 ## MIT Licensed
