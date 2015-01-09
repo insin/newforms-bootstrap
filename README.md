@@ -1,15 +1,19 @@
 # newforms-bootstrap
 
-A `BootstrapForm` component for rendering a [newforms](https://github.com/insin/newforms)
-Form, using Bootstrap 3 classes and conventions for form layout.
+Components for rendering a [newforms](https://github.com/insin/newforms)
+Form using Bootstrap 3 CSS classes and conventions for layout.
 
 ## Demos
 
 * [The Form of Death](http://insin.github.io/newforms-bootstrap/index.html) - a
   form with a range of validation defined, including async field validation and
-  whole-form validation.
+  whole-form validation, rendered with the `<BootstrapForm>` component.
+* [Grid Components](http://insin.github.io/newforms-bootstrap/grid.html) - a
+  form layout making use of the the Bootstrap grid, with the provided
+  `<Container>`, `<Row>`, `<Col>` and `<Field>` components.
 * [All Default Fields](http://insin.github.io/newforms-bootstrap/allfields.html) -
-  a form usiong all the default newforms Fields and Widgets.
+  a form usiong all the default newforms Fields and Widgets, rendered with the
+  `<BootstrapForm>` component.
 
 ## Install
 
