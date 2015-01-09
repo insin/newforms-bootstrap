@@ -193,11 +193,11 @@ described above plus the following:
 
 ## Field / Widget Patching
 
-`BootstrapForm` patches the widgets of certain fields for Bootstrap-compatible
-output.
+`BootstrapForm` and `Container` will automatically patch the widgets of certain
+fields for Bootstrap-compatible output.
 
-These changes will be made the first time it renders a form - patching will only
-affect the form instance it was given.
+These changes will be made the first time they renders a form - patching will
+only affect the form instance it was given.
 
 ### `ChoiceField` with `RadioSelect`
 
