@@ -322,7 +322,7 @@ var ColMixin = {
   , mdOffset: colSizeChecker
   , lgOffset: colSizeChecker
   , __all__: function(props, propName, componentName) {
-      if (!props.xs && !props.sm && !props.md && !props.lg) {
+      if (props.xs == null && props.sm == null && props.md == null && props.lg == null) {
         return new Error(
           `Invalid props for \`${componentName}\, at least one column size ` +
           `must be specified.`
