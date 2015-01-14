@@ -34,7 +34,7 @@
   "scripts": {
     "debug": "gulp --debug",
     "dist": "gulp bundle-js --production",
-    "test": "tape test/*.js",
+    "test": "gulp transpile-js && tape test/*.js",
     "watch": "gulp"
   },
   "browserify-shim": {
