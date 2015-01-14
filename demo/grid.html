@@ -18,20 +18,40 @@ var {Col, Container, Row, Field} = BootstrapForm
 var ProductForm = forms.Form.extend({
   productName: forms.CharField(),
   tags: forms.CharField(),
-  vendor: forms.ChoiceField({choices: ['Vendor 1', 'Vendor 2']}),
-  productType: forms.ChoiceField({choices: ['Product 1', 'Product 2']}),
+  vendor: forms.ChoiceField({choices: ['', 'Vendor 1', 'Vendor 2']}),
+  productType: forms.ChoiceField({choices: ['', 'Product 1', 'Product 2']}),
   productDescription: forms.CharField({widget: forms.Textarea}),
-  sku: forms.CharField(),
+  sku: forms.CharField({label: 'SKU'}),
   initialStockLevel: forms.IntegerField({minValue: 0}),
   costPrice: forms.DecimalField({minValue: 0, decimalPlaces: 2}),
   wholesalePrice: forms.DecimalField({minValue: 0, decimalPlaces: 2}),
   retailPrice: forms.DecimalField({minValue: 0, decimalPlaces: 2}),
 
-  clean() {
+  cleanSku(cb) {
+    setTimeout(() => {
+      if (this.cleanedData.sku == '12345') {
+        return cb(null, 'This SKU is already taken.')
+      }
+      cb(null)
+    }, 1000 + Math.random() * 1000)
+  },
+
+  clean(cb) {
     var {productDescription} = this.cleanedData
     if (productDescription && productDescription.toLowerCase().indexOf('clowns') != -1) {
       throw forms.ValidationError('No clowns!')
     }
+
+    var {productName, vendor} = this.cleanedData
+    if (!productName) {
+      return false
+    }
+    setTimeout(() => {
+      if (productName == 'Widget' && vendor == 'Vendor 1') {
+        return cb(null, 'Product Name already exists for Vendor.')
+      }
+      cb(null)
+    }, 1000 + Math.random() * 1000)
   }
 })
 
@@ -70,8 +90,26 @@ var App = React.createClass({
             </Row>
           </Container>
         </forms.RenderForm>
-        <button className="btn btn-primary">Submit</button>
+        <div className="container">
+          <div className="row">
+            <div className="col-xs-12 form-group">
+              <button className="btn btn-primary">Submit</button>
+            </div>
+          </div>
+        </div>
       </form>
+      <div className="container">
+        <div className="row">
+          <div className="col-xs-12">
+            <p>Custom validation checks:</p>
+            <ul>
+              <li>A product named "Widget" already exists for Vendor 1.</li>
+              <li>The SKU "12345" is already taken.</li>
+              <li>The product description is not allowed to mention clowns.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
     </div>
   }
 })

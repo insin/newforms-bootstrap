@@ -252,11 +252,13 @@ var BootstrapForm = React.createClass({
 var Container = React.createClass({
   propTypes: {
     fluid: React.PropTypes.bool
+  , spinner: React.PropTypes.string
   },
 
   getDefaultProps() {
     return {
       fluid: false
+    , spinner: SPINNER
     }
   },
 
@@ -268,7 +270,13 @@ var Container = React.createClass({
       {formErrors.isPopulated() && <div key={form.addPrefix('__all__')} className="alert alert-danger has-error">
         {formErrors.messages().map(errorMessage)}
       </div>}
-      {React.Children.map(this.props.children, child => cloneWithProps(child, {form: this.props.form}))}
+      {React.Children.map(this.props.children, child => cloneWithProps(child, {
+        form: this.props.form
+      , spinner: this.props.spinner
+      }))}
+      {form.nonFieldPending() && <span key={form.addPrefix('__pending__')} className="help-block">
+        <img src={this.props.spinner}/> Validating&hellip;
+      </span>}
     </div>
   }
 })
@@ -276,7 +284,12 @@ var Container = React.createClass({
 var Row = React.createClass({
   render() {
     return <div className="row">
-      {React.Children.map(this.props.children, child => cloneWithProps(child, {form: this.props.form}))}
+      {React.Children.map(this.props.children, (child, index) => {
+        return cloneWithProps(child, {
+          form: this.props.form
+        , spinner: this.props.spinner
+        })
+      })}
     </div>
   }
 })
