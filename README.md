@@ -1,5 +1,7 @@
 # newforms-bootstrap
 
+[![build status](https://secure.travis-ci.org/insin/newforms-bootstrap.png)](http://travis-ci.org/insin/newforms-bootstrap)
+
 Components for rendering a [newforms](https://github.com/insin/newforms)
 Form using Bootstrap 3 CSS classes and conventions for layout.
 
