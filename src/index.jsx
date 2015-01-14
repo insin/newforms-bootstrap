@@ -261,8 +261,13 @@ var Container = React.createClass({
   },
 
   render() {
-    patchForm(this.props.form)
+    var {form} = this.props
+    patchForm(form)
+    var formErrors = form.nonFieldErrors()
     return <div className={cx('container', {'fluid': this.props.fluid})}>
+      {formErrors.isPopulated() && <div key={form.addPrefix('__all__')} className="alert alert-danger has-error">
+        {formErrors.messages().map(errorMessage)}
+      </div>}
       {React.Children.map(this.props.children, child => cloneWithProps(child, {form: this.props.form}))}
     </div>
   }
