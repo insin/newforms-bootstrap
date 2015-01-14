@@ -281,29 +281,46 @@ var Row = React.createClass({
   }
 })
 
-var stringOrNumberRE = /^(?:string|number)$/
-
-function stringOrNumberProp(props, propName, componentName) {
-  var value = props[propName]
+/**
+ * Validates that a prop is a String or a Number with a value between 1 and 12.
+ */
+function colSizeChecker(props, propName, componentName, location) {
+  var originalValue = value = props[propName]
   var type = Object.prototype.toString.call(value).slice(8, -1).toLowerCase()
-  if (value != null && (!stringOrNumberRE.test(type) || isNaN(value))) {
-    return new Error(
-      `Invalid \`${propName}\` of value \`${value}\`supplied to ` +
-      `\`${componentName}\, expected a String or a Number.`
-    )
+  if (value != null) {
+    if (type == 'string') {
+      value = Number(value)
+      type = 'number'
+    }
+
+    if (type == 'number' && !isNaN(value)) {
+      if (value < 1 || value > 12) {
+        return new Error(
+          `Invalid ${location} \`${propName}\` of value \`${value}\` ` +
+          `supplied to \`${componentName}\`, Bootstrap column sizes must be ` +
+          `between 1 and 12.`
+        )
+      }
+    }
+    else {
+      return new Error(
+        `Invalid ${location} \`${propName}\` of value \`${originalValue}\` ` +
+        `supplied to \`${componentName}\`, expected a String or a Number.`
+      )
+    }
   }
 }
 
 var ColMixin = {
   propTypes: {
-    xs: stringOrNumberProp
-  , sm: stringOrNumberProp
-  , md: stringOrNumberProp
-  , lg: stringOrNumberProp
-  , xsOffset: stringOrNumberProp
-  , smOffset: stringOrNumberProp
-  , mdOffset: stringOrNumberProp
-  , lgOffset: stringOrNumberProp
+    xs: colSizeChecker
+  , sm: colSizeChecker
+  , md: colSizeChecker
+  , lg: colSizeChecker
+  , xsOffset: colSizeChecker
+  , smOffset: colSizeChecker
+  , mdOffset: colSizeChecker
+  , lgOffset: colSizeChecker
   , __all__: function(props, propName, componentName) {
       if (!props.xs && !props.sm && !props.md && !props.lg) {
         return new Error(
@@ -360,6 +377,9 @@ extend(BootstrapForm, {
 , Col
 , Container
 , Field
+, PropTypes: {
+    colSize: colSizeChecker
+  }
 , RadioInlineRenderer: BootstrapRadioInlineRenderer
 , RadioRenderer: BootstrapRadioRenderer
 , Row
