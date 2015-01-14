@@ -25,7 +25,14 @@ var ProductForm = forms.Form.extend({
   initialStockLevel: forms.IntegerField({minValue: 0}),
   costPrice: forms.DecimalField({minValue: 0, decimalPlaces: 2}),
   wholesalePrice: forms.DecimalField({minValue: 0, decimalPlaces: 2}),
-  retailPrice: forms.DecimalField({minValue: 0, decimalPlaces: 2})
+  retailPrice: forms.DecimalField({minValue: 0, decimalPlaces: 2}),
+
+  clean() {
+    var {productDescription} = this.cleanedData
+    if (productDescription && productDescription.toLowerCase().indexOf('clowns') != -1) {
+      throw forms.ValidationError('No clowns!')
+    }
+  }
 })
 
 var App = React.createClass({
