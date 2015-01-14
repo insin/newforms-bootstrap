@@ -276,10 +276,18 @@ var Row = React.createClass({
   }
 })
 
-var stringOrNumberProp = React.PropTypes.oneOf([
-  React.PropTypes.number
-, React.PropTypes.string
-])
+var stringOrNumberRE = /^(?:string|number)$/
+
+function stringOrNumberProp(props, propName, componentName) {
+  var value = props[propName]
+  var type = Object.prototype.toString.call(value).slice(8, -1).toLowerCase()
+  if (value != null && (!stringOrNumberRE.test(type) || isNaN(value))) {
+    return new Error(
+      `Invalid \`${propName}\` of value \`${value}\`supplied to ` +
+      `\`${componentName}\, expected a String or a Number.`
+    )
+  }
+}
 
 var ColMixin = {
   propTypes: {
@@ -294,7 +302,8 @@ var ColMixin = {
   , __all__: function(props, propName, componentName) {
       if (!props.xs && !props.sm && !props.md && !props.lg) {
         return new Error(
-          `Invalid props for \`${componentName}\, column size must be specified.`
+          `Invalid props for \`${componentName}\, at least one column size ` +
+          `must be specified.`
         )
       }
     }
