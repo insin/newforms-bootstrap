@@ -285,7 +285,8 @@ var Row = React.createClass({
  * Validates that a prop is a String or a Number with a value between 1 and 12.
  */
 function colSizeChecker(props, propName, componentName, location) {
-  var originalValue = value = props[propName]
+  var originalValue = props[propName]
+  var value = props[propName]
   var type = Object.prototype.toString.call(value).slice(8, -1).toLowerCase()
   if (value != null) {
     if (type == 'string') {

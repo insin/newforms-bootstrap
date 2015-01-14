@@ -88,7 +88,7 @@ test('PropTypes.colSize', function(t) {
   )
   t.equal(
     colSize({md: 'blah'}, 'md', 'Test', 'prop').message
-  , 'Invalid prop `md` of value `NaN` supplied to `Test`, expected a String or a Number.'
+  , 'Invalid prop `md` of value `blah` supplied to `Test`, expected a String or a Number.'
   , 'Non-numeric String'
   )
   t.equal(
