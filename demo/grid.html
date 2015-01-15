@@ -8,6 +8,18 @@
   <script src="../dist/newforms-bootstrap.js"></script>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap-theme.min.css">
+  <style>
+  .AutoTest .row > div {
+    text-align: center;
+    background-color: #eee;
+    border-radius: .6em;
+    overflow: hidden;
+    margin-bottom: .5em;
+    border: 1px solid #ccc;
+    padding-top: .2em;
+    padding-bottom: .2em;
+  }
+  </style>
 </head>
 <body>
 <script type="text/jsx;harmony=true">void function() {
@@ -43,7 +55,7 @@ var ProductForm = forms.Form.extend({
     }
 
     var {productName, vendor} = this.cleanedData
-    if (!productName) {
+    if (!productName || !vendor) {
       return false
     }
     setTimeout(() => {
@@ -56,15 +68,16 @@ var ProductForm = forms.Form.extend({
 })
 
 var App = React.createClass({
-  _onSubmit(e) {
+  _onSubmit(refName, e) {
     e.preventDefault()
-    this.refs.productForm.getForm().validate()
+    this.refs[refName].getForm().validate(() => {})
   },
 
   render() {
     return <div className="container">
       <h1><a href="https://github.com/insin/newforms-bootstrap">newforms-bootstrap</a> Grid Components</h1>
-      <form onSubmit={this._onSubmit}>
+      <h2>Manual Column Widths</h2>
+      <form onSubmit={this._onSubmit.bind(this, 'productForm')}>
         <forms.RenderForm form={ProductForm} ref="productForm">
           <Container>
             <Row>
@@ -79,9 +92,7 @@ var App = React.createClass({
               <Field name="productDescription" md="12"/>
             </Row>
             <Row>
-              <Col md="2">
-                I'm just a regular column.
-              </Col>
+              <Col md="2"> I'm just a regular column.</Col>
               <Field name="sku" md="2"/>
               <Field name="initialStockLevel" md="2"/>
               <Field name="costPrice" md="2"/>
@@ -110,10 +121,171 @@ var App = React.createClass({
           </div>
         </div>
       </div>
+
+      <h2 id="autocolumns">Auto Column Widths</h2>
+      <p>
+        Columns in the following form layout are automatically assigned a width
+        based on the number of columns in the row which don't already have one.
+        In this case, none of them do.
+      </p>
+      <form onSubmit={this._onSubmit.bind(this, 'autoColumnsForm')}>
+        <forms.RenderForm form={ProductForm} prefix="auto" ref="autoColumnsForm">
+          <Container autoColumns="md">
+            <Row>
+              <Field name="productName"/>
+              <Field name="tags"/>
+            </Row>
+            <Row>
+              <Field name="vendor"/>
+              <Field name="productType"/>
+            </Row>
+            <Row>
+              <Field name="productDescription"/>
+            </Row>
+            <Row>
+              <Col>I'm just a regular column.</Col>
+              <Field name="sku"/>
+              <Field name="initialStockLevel"/>
+              <Field name="costPrice"/>
+              <Field name="wholesalePrice"/>
+              <Field name="retailPrice"/>
+            </Row>
+          </Container>
+        </forms.RenderForm>
+        <div className="container">
+          <div className="row">
+            <div className="col-xs-12 form-group">
+              <button className="btn btn-primary">Submit</button>
+            </div>
+          </div>
+        </div>
+      </form>
+
+      <h2 id="autocolumnstest">Auto Column Widths Test</h2>
+      <div className="AutoTest">
+        <Container form={new ProductForm()} autoColumns="sm">
+          <Row>
+            <Col>One</Col>
+          </Row>
+          <Row>
+            <Col>One</Col>
+            <Col>Two</Col>
+          </Row>
+          <Row>
+            <Col>One</Col>
+            <Col smOffset="2">Two <code>smOffset="2"</code></Col>
+          </Row>
+          <Row>
+            <Col>One</Col>
+            <Col>Two</Col>
+            <Col>Three</Col>
+          </Row>
+          <Row>
+            <Col>One</Col>
+            <Col>Two</Col>
+            <Col smOffset="1">Three <code>smOffset="1"</code></Col>
+          </Row>
+          <Row>
+            <Col>One</Col>
+            <Col>Two</Col>
+            <Col>Three</Col>
+            <Col>Four</Col>
+          </Row>
+          <Row>
+            <Col smOffset="1">One <code>smOffset="1"</code></Col>
+            <Col>Two</Col>
+            <Col>Three</Col>
+            <Col>Four</Col>
+          </Row>
+          <Row>
+            <Col>One</Col>
+            <Col>Two</Col>
+            <Col>Three</Col>
+            <Col>Four</Col>
+            <Col>Five</Col>
+          </Row>
+          <Row>
+            <Col>One</Col>
+            <Col>Two</Col>
+            <Col>Three</Col>
+            <Col>Four</Col>
+            <Col>Five</Col>
+            <Col>Six</Col>
+          </Row>
+          <Row>
+            <Col>One</Col>
+            <Col>Two</Col>
+            <Col>Three</Col>
+            <Col>Four</Col>
+            <Col>Five</Col>
+            <Col>Six</Col>
+            <Col>Seven</Col>
+          </Row>
+          <Row>
+            <Col>One</Col>
+            <Col>Two</Col>
+            <Col>Three</Col>
+            <Col>Four</Col>
+            <Col>Five</Col>
+            <Col>Six</Col>
+            <Col>Seven</Col>
+            <Col>Eight</Col>
+          </Row>
+          <Row>
+            <Col>One</Col>
+            <Col>Two</Col>
+            <Col>Three</Col>
+            <Col>Four</Col>
+            <Col>Five</Col>
+            <Col>Six</Col>
+            <Col>Seven</Col>
+            <Col>Eight</Col>
+            <Col>Nine</Col>
+          </Row>
+          <Row>
+            <Col>One</Col>
+            <Col>Two</Col>
+            <Col>Three</Col>
+            <Col>Four</Col>
+            <Col>Five</Col>
+            <Col>Six</Col>
+            <Col>Seven</Col>
+            <Col>Eight</Col>
+            <Col>Nine</Col>
+            <Col>Ten</Col>
+          </Row>
+          <Row>
+            <Col>One</Col>
+            <Col>Two</Col>
+            <Col>Three</Col>
+            <Col>Four</Col>
+            <Col>Five</Col>
+            <Col>Six</Col>
+            <Col>Seven</Col>
+            <Col>Eight</Col>
+            <Col>Nine</Col>
+            <Col>Ten</Col>
+            <Col>Eleven</Col>
+          </Row>
+          <Row>
+            <Col>One</Col>
+            <Col>Two</Col>
+            <Col>Three</Col>
+            <Col>Four</Col>
+            <Col>Five</Col>
+            <Col>Six</Col>
+            <Col>Seven</Col>
+            <Col>Eight</Col>
+            <Col>Nine</Col>
+            <Col>Ten</Col>
+            <Col>Eleven</Col>
+            <Col>Twelve</Col>
+          </Row>
+        </Container>
+      </div>
     </div>
   }
 })
-
 
 React.render(<App/>, document.body)
 }()</script>
