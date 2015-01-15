@@ -12,6 +12,8 @@ var streamify = require('gulp-streamify')
 var uglify = require('gulp-uglify')
 var gutil = require('gulp-util')
 
+process.env.NODE_ENV = gutil.env.production ? 'production' : 'development'
+
 var pkg = require('./package.json')
 var devBuild = gutil.env.production ? '' : ' (dev build at ' + (new Date()).toUTCString() + ')'
 var distHeader = '/*!\n\
