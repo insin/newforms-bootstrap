@@ -19,6 +19,12 @@
     padding-top: .2em;
     padding-bottom: .2em;
   }
+  .row.special > div {
+    background-color: #eef;
+  }
+  div[class*="col-"].special  {
+    background-color: #efe !important;
+  }
   </style>
 </head>
 <body>
@@ -177,7 +183,7 @@ var App = React.createClass({
           </Row>
           <Row>
             <Col>One</Col>
-            <Col>Two</Col>
+            <Col className="special">Two <code>className="special"</code></Col>
             <Col>Three</Col>
           </Row>
           <Row>
@@ -204,7 +210,7 @@ var App = React.createClass({
             <Col>Four</Col>
             <Col>Five</Col>
           </Row>
-          <Row>
+          <Row className="special">
             <Col>One</Col>
             <Col>Two</Col>
             <Col>Three</Col>

@@ -26,19 +26,28 @@ if ("production" !== process.env.NODE_ENV) {
   }
 }
 
-var cx = function(staticClasses, conditionalClasses) {
+var toString = Object.prototype.toString
+
+function cx(/*[...staticClasses: (string|falsy)[, conditionalClasses: Object.<string, booleanish>]]*/) {
   var classNames = []
-  if (typeof conditionalClasses == 'undefined') {
-    conditionalClasses = staticClasses
+  var staticClassCount = arguments.length
+  var conditionalClasses = null
+  if (toString.call(arguments[arguments.length - 1]) == '[object Object]') {
+    conditionalClasses = arguments[arguments.length - 1]
+    staticClassCount -= 1
   }
-  else {
-    classNames.push(staticClasses)
-  }
-  Object.keys(conditionalClasses).forEach(className => {
-    if (!!conditionalClasses[className]) {
-      classNames.push(className)
+  for (var i = 0, l = staticClassCount; i < l; i++) {
+    if (arguments[i]) {
+      classNames.push(arguments[i])
     }
-  })
+  }
+  if (conditionalClasses != null) {
+    Object.keys(conditionalClasses).forEach(className => {
+      if (!!conditionalClasses[className]) {
+        classNames.push(className)
+      }
+    })
+  }
   return classNames.join(' ')
 }
 
@@ -373,7 +382,8 @@ function calculateColumnProps(childProps, options) {
 
 var ColMixin = {
   propTypes: {
-    xs: colSizeChecker
+    className: React.PropTypes.string
+  , xs: colSizeChecker
   , sm: colSizeChecker
   , md: colSizeChecker
   , lg: colSizeChecker
@@ -394,13 +404,14 @@ var ColMixin = {
     classNames[`col-sm-offset-${props.smOffset}`] = !!props.smOffset
     classNames[`col-md-offset-${props.mdOffset}`] = !!props.mdOffset
     classNames[`col-lg-offset-${props.lgOffset}`] = !!props.lgOffset
-    return cx(classNames)
+    return cx(props.className, classNames)
   }
 }
 
 var Container = React.createClass({
   propTypes: {
     autoColumns: React.PropTypes.oneOf(BOOTSTRAP_COLUMN_SIZES)
+  , className: React.PropTypes.string
   , fluid: React.PropTypes.bool
   , spinner: React.PropTypes.string
   },
@@ -417,7 +428,7 @@ var Container = React.createClass({
     var {form} = this.props
     patchForm(form)
     var formErrors = form.nonFieldErrors()
-    return <div className={cx('container', {'fluid': this.props.fluid})}>
+    return <div className={cx(this.props.className, {'container': !this.props.fluid, 'fluid': this.props.fluid})}>
       {formErrors.isPopulated() && <div key={form.addPrefix('__all__')} className="alert alert-danger has-error">
         {formErrors.messages().map(errorMessage)}
       </div>}
@@ -437,6 +448,7 @@ var Container = React.createClass({
 var Row = React.createClass({
   propTypes: {
     autoColumns: React.PropTypes.oneOf(BOOTSTRAP_COLUMN_SIZES)
+  , className: React.PropTypes.string
   },
 
   render() {
@@ -451,7 +463,7 @@ var Row = React.createClass({
       , rowNum: this.props.index + 1
       })
     }
-    return <div className="row">
+    return <div className={cx('row', this.props.className)}>
       {React.Children.map(this.props.children, (child, index) => {
         return cloneWithProps(child, extend({
           form: this.props.form
