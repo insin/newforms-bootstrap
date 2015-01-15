@@ -13,6 +13,8 @@ var SPINNER = 'data:image/gif;base64,R0lGODlhDgAOANU%2FAJ2rtf39%2FfL09a65wvX2993
 
 var BOOTSTRAP_COLUMN_SIZES = ['xs', 'sm', 'md', 'lg']
 
+// =================================================================== Utils ===
+
 var noobj = {}
 
 var warn = () => {}
@@ -56,55 +58,14 @@ function errorMessage(message) {
   </span>
 }
 
-var BootstrapField = React.createClass({
-  propTypes: {
-    field: React.PropTypes.instanceOf(BoundField).isRequired
-  , spinner: React.PropTypes.string
-  },
+// ============================================== Bootstrap Newforms Objects ===
 
-  getDefaultProps() {
-    return {
-      spinner: SPINNER
-    }
-  },
-
-  render() {
-    var field = this.props.field
-    var status = field.status()
-    var isBooleanField = field.field.constructor === BooleanField
-    var isFileField = field.field instanceof FileField
-    var isSpecialCaseWidget = isBooleanField || isFileField
-    var containerClasses = cx({
-      'checkbox': isBooleanField
-    , 'form-group': !isBooleanField
-    , 'has-error': status == 'error'
-    , 'has-success': status == 'valid'
-    })
-    var widgetAttrs = {attrs: {className: cx({
-      'form-control': !isFileField  &&
-                      !(field.field.widget instanceof RadioSelect) &&
-                      !(field.field.widget instanceof CheckboxSelectMultiple)
-    })}}
-    // Always show help text for empty fields, regardless of status
-    var showHelpText = field.helpText && (field.isEmpty() || status == 'default')
-
-    return <div className={containerClasses}>
-      {!isBooleanField && field.labelTag({attrs: {className: 'control-label'}})}
-      {!isSpecialCaseWidget && field.asWidget(widgetAttrs)}
-      {isBooleanField && <label htmlFor={field.idForLabel()}>
-        {field.asWidget()} {field.label}
-      </label>}
-      {isFileField && <div>
-        {field.asWidget(widgetAttrs)}
-      </div>}
-      {showHelpText && field.helpTextTag({attrs: {className: 'help-block'}})}
-      {status == 'pending' && <span className="help-block">
-        <img src={this.props.spinner}/> Validating&hellip;
-      </span>}
-      {status == 'error' && field.errors().messages().map(errorMessage)}
-    </div>
+function patchForm(form) {
+  if (!form.__patchedByBootstrapForm) {
+    BootstrapForm.patchFields(form)
+    form.__patchedByBootstrapForm = true
   }
-})
+}
 
 var BootstrapChoiceFieldRenderer = ChoiceFieldRenderer.extend({
   className: null,
@@ -180,12 +141,7 @@ var BootstrapRadioInlineRenderer = RadioFieldRenderer.extend({
   }
 })
 
-function patchForm(form) {
-  if (!form.__patchedByBootstrapForm) {
-    BootstrapForm.patchFields(form)
-    form.__patchedByBootstrapForm = true
-  }
-}
+// ========================================================= Form Components ===
 
 var BootstrapForm = React.createClass({
   statics: {
@@ -261,6 +217,56 @@ var BootstrapForm = React.createClass({
       </span>)
     }
     return rows
+  }
+})
+
+var BootstrapField = React.createClass({
+  propTypes: {
+    field: React.PropTypes.instanceOf(BoundField).isRequired
+  , spinner: React.PropTypes.string
+  },
+
+  getDefaultProps() {
+    return {
+      spinner: SPINNER
+    }
+  },
+
+  render() {
+    var field = this.props.field
+    var status = field.status()
+    var isBooleanField = field.field.constructor === BooleanField
+    var isFileField = field.field instanceof FileField
+    var isSpecialCaseWidget = isBooleanField || isFileField
+    var containerClasses = cx({
+      'checkbox': isBooleanField
+    , 'form-group': !isBooleanField
+    , 'has-error': status == 'error'
+    , 'has-success': status == 'valid'
+    })
+    var widgetAttrs = {attrs: {className: cx({
+      'form-control': !isFileField  &&
+                      !(field.field.widget instanceof RadioSelect) &&
+                      !(field.field.widget instanceof CheckboxSelectMultiple)
+    })}}
+    // Always show help text for empty fields, regardless of status
+    var showHelpText = field.helpText && (field.isEmpty() || status == 'default')
+
+    return <div className={containerClasses}>
+      {!isBooleanField && field.labelTag({attrs: {className: 'control-label'}})}
+      {!isSpecialCaseWidget && field.asWidget(widgetAttrs)}
+      {isBooleanField && <label htmlFor={field.idForLabel()}>
+        {field.asWidget()} {field.label}
+      </label>}
+      {isFileField && <div>
+        {field.asWidget(widgetAttrs)}
+      </div>}
+      {showHelpText && field.helpTextTag({attrs: {className: 'help-block'}})}
+      {status == 'pending' && <span className="help-block">
+        <img src={this.props.spinner}/> Validating&hellip;
+      </span>}
+      {status == 'error' && field.errors().messages().map(errorMessage)}
+    </div>
   }
 })
 
