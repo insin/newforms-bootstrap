@@ -104,7 +104,7 @@ var {Col, Container, Row, Field} = BootstrapForm
 ```
 
 To automatically split the 12 available Bootstrap grid units among columns, pass
-an `autoColumns` prop to a `Container` or `Row` componeont. For example, the
+an `autoColumns` prop to a `Container` or `Row` component. For example, the
 following rows would render identically:
 
 ```html
@@ -121,7 +121,7 @@ following rows would render identically:
 
 This takes into account any column widths and offsets which have been provided
 for the specified size unit, so this grid layout would render identically to the
-first grid layour example above:
+first grid layout example above:
 
 ```html
 <forms.RenderForm form={ProductForm} ref="productForm">
@@ -205,15 +205,15 @@ Renders a container.
 * `form`: `Form` - the `Form` instance to be rendered. Will be passed as a prop
   to all children.
 
-* `autoColumns` - a Bootstrap grid size unit (`xs`, `sm`, `md` or `lg`). If
+* `autoColumns`L `String` - a Bootstrap grid size unit (`xs`, `sm`, `md` or `lg`). If
   provided, will be passed to all children.
 
 * `fluid`: `Boolean` (default: `false`) - if `true`, the container will have the
   `.container-fluid` class, otherwise it will be a `.container`
 
-* `className` - an additional class for the container element.
+* `className`L `String` - an additional class for the container element.
 
-* `spinner` - as per `BootstrapForm`, see above.
+* `spinner`L `String` - as per `BootstrapForm`, see above.
 
 ### `Row`
 
@@ -224,18 +224,18 @@ Renders a `.row`.
 * `form`: `Form` - the `Form` instance to be rendered. Will be passed as a prop
   to all children.
 
-* `autoColumns` - a Bootstrap grid size unit (`xs`, `sm`, `md` or `lg`).
+* `autoColumns`: `String` - a Bootstrap grid size unit (`xs`, `sm`, `md` or `lg`).
 
   If provided, the Row will ensure that all its children have a column width set
   for the specified size. If any of them do not, the number of available column
   units left (out of the 12 unit available in Bootstrap's grid system) after
   considering any widths and offsets which *have* been provided for the unit
-  provided will be distibuted eqwally among children which need a width set.
+  provided will be distibuted equally among children which need a width set.
 
   If the remaining units cannot be split equally among the children, the initial
-  children in the row will have the leftover units divided among them.
+  children in the row will have the leftover units divided amongst them.
 
-* `className` - an additional class for the container element.
+* `className`: `String` - an additional class for the container element.
 
 ### `Col`
 
@@ -260,7 +260,7 @@ Additionally, the column's offset can be specified with the following props:
 * `mdOffset`
 * `lgOffset`
 
-* `className` - an additional class for the column element.
+* `className`: `String` - an additional class for the column element.
 
 ### `Field`
 
