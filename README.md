@@ -103,6 +103,54 @@ var {Col, Container, Row, Field} = BootstrapForm
 </forms.RenderForm>
 ```
 
+To automatically split the 12 available Bootstrap grid units among columns, pass
+an `autoColumns` prop to a `Container` or `Row` componeont. For example, the
+following rows would render identically:
+
+```html
+<Row>
+  <Field name="vendor" md="6"/>
+  <Field name="productType" md="6"/>
+</Row>
+
+<Row autoColumns="md">
+  <Field name="vendor"/>
+  <Field name="productType"/>
+</Row>
+```
+
+This takes into account any column widths and offsets which have been provided
+for the specified size unit, so this grid layout would render identically to the
+first grid layour example above:
+
+```html
+<forms.RenderForm form={ProductForm} ref="productForm">
+  <Container autoColumns="md">
+    <Row>
+      <Field name="productName" md="8"/>
+      <Field name="tags"/>
+    </Row>
+    <Row>
+      <Field name="vendor"/>
+      <Field name="productType"/>
+    </Row>
+    <Row>
+      <Field name="productDescription"/>
+    </Row>
+    <Row>
+      <Col>
+        I'm just a regular column.
+      </Col>
+      <Field name="sku"/>
+      <Field name="initialStockLevel"/>
+      <Field name="costPrice"/>
+      <Field name="wholesalePrice"/>
+      <Field name="retailPrice"/>
+    </Row>
+  </Container>
+</forms.RenderForm>
+```
+
 ## API
 
 ### `BootstrapForm` props
@@ -154,14 +202,40 @@ Renders a container.
 
 #### `Container` props
 
-* `form`: `Form` - the `Form` instance to be rendered.
+* `form`: `Form` - the `Form` instance to be rendered. Will be passed as a prop
+  to all children.
+
+* `autoColumns` - a Bootstrap grid size unit (`xs`, `sm`, `md` or `lg`). If
+  provided, will be passed to all children.
 
 * `fluid`: `Boolean` (default: `false`) - if `true`, the container will have the
   `.container-fluid` class, otherwise it will be a `.container`
 
+* `className` - an additional class for the container element.
+
+* `spinner` - as per `BootstrapForm`, see above.
+
 ### `Row`
 
 Renders a `.row`.
+
+#### `Row` props
+
+* `form`: `Form` - the `Form` instance to be rendered. Will be passed as a prop
+  to all children.
+
+* `autoColumns` - a Bootstrap grid size unit (`xs`, `sm`, `md` or `lg`).
+
+  If provided, the Row will ensure that all its children have a column width set
+  for the specified size. If any of them do not, the number of available column
+  units left (out of the 12 unit available in Bootstrap's grid system) after
+  considering any widths and offsets which *have* been provided for the unit
+  provided will be distibuted eqwally among children which need a width set.
+
+  If the remaining units cannot be split equally among the children, the initial
+  children in the row will have the leftover units divided among them.
+
+* `className` - an additional class for the container element.
 
 ### `Col`
 
@@ -186,6 +260,8 @@ Additionally, the column's offset can be specified with the following props:
 * `mdOffset`
 * `lgOffset`
 
+* `className` - an additional class for the column element.
+
 ### `Field`
 
 Renders a column containing a named form field.
@@ -195,7 +271,9 @@ Renders a column containing a named form field.
 `Field` is a specialisation of `Col`, so it accepts all the sizing/offset props
 described above plus the following:
 
-* `name`: `String` - the name of the field to be rendered
+* `form`: `Form` - the `Form` instance to be rendered.
+
+* `name`: `String` - the name of the field to be rendered.
 
 ## Field / Widget Patching
 
@@ -224,7 +302,7 @@ widgets as equally-distributed columns in a Bootstrap grid row.
 
 ## TODO
 
-* `BootstrapForm.layout` configuration
+* `BootstrapForm` configuration
   * Make use of `has-error`/`has-success` highlighting configurable
   * Horizontal layout with configuratble breakpoints
 
