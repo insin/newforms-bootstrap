@@ -29,11 +29,20 @@ npm-compatible packaging system such as [Browserify](http://browserify.org/) or
 npm install newforms-bootstrap
 ```
 
+By default, newforms-bootstrap will be in development mode. To use it in
+production mode, set the environment variable `NODE_ENV` to `'production'` when
+bundling. To completely remove all development mode code, use a minifier that
+performs dead-code elimination, such as
+[UglifyJS](https://github.com/mishoo/UglifyJS2).
+
 ### Browser bundle
 
 The browser bundle exposes a global `BootstrapForm` variable and expects to
 find global `React` ([React](http://facebook.github.io/react/)) and `forms`
 ([newforms](https://github.com/insin/newforms)) variables to work with.
+
+The uncompressed bundle is in development mode, so will log warnings about
+potential mistakes.
 
 You can find it in the [/dist directory](https://github.com/insin/newforms-bootstrap/tree/master/dist).
 
