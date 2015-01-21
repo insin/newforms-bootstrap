@@ -15,7 +15,7 @@ var gutil = require('gulp-util')
 process.env.NODE_ENV = gutil.env.production ? 'production' : 'development'
 
 var pkg = require('./package.json')
-var devBuild = gutil.env.production ? '' : ' (dev build at ' + (new Date()).toUTCString() + ')'
+var devBuild = gutil.env.release ? '' : ' (dev build at ' + (new Date()).toUTCString() + ')'
 var distHeader = '/*!\n\
  * <%= pkg.name %> <%= pkg.version %><%= devBuild %> - <%= pkg.homepage %>\n\
  * <%= pkg.license %> Licensed\n\
@@ -23,10 +23,6 @@ var distHeader = '/*!\n\
 
 var jsSrcPaths = './src/**/*.js*'
 var jsLibPaths = './lib/**/*.js'
-
-gulp.task('clean-dist', function(cb) {
-  del('./dist/*.js', cb)
-})
 
 gulp.task('clean-lib', function(cb) {
   del(jsLibPaths, cb)
@@ -45,7 +41,7 @@ gulp.task('lint-js', ['transpile-js'], function() {
     .pipe(jshint.reporter('jshint-stylish'))
 })
 
-gulp.task('bundle-js', ['clean-dist', 'lint-js'], function() {
+gulp.task('bundle-js', ['lint-js'], function() {
   var b = browserify(pkg.main, {
     debug: !!gutil.env.debug
   , standalone: pkg.standalone
