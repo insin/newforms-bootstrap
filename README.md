@@ -214,15 +214,15 @@ Renders a container.
 * `form`: `Form` - the `Form` instance to be rendered. Will be passed as a prop
   to all children.
 
-* `autoColumns`L `String` - a Bootstrap grid size unit (`xs`, `sm`, `md` or `lg`). If
+* `autoColumns`: `String` - a Bootstrap grid size unit (`xs`, `sm`, `md` or `lg`). If
   provided, will be passed to all children.
 
 * `fluid`: `Boolean` (default: `false`) - if `true`, the container will have the
   `.container-fluid` class, otherwise it will be a `.container`
 
-* `className`L `String` - an additional class for the container element.
+* `className`: `String` - an additional class for the container element.
 
-* `spinner`L `String` - as per `BootstrapForm`, see above.
+* `spinner`: `String` - as per `BootstrapForm`, see above.
 
 ### `Row`
 
