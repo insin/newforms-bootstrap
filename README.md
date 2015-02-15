@@ -48,6 +48,8 @@ You can find it in the [/dist directory](https://github.com/insin/newforms-boots
 
 ## Usage
 
+### Basic Form
+
 Pass `BootstrapForm` a Form instance as a `form` prop.
 
 Any component which accepts a `form` prop can be used as a custom renderer for
@@ -78,6 +80,8 @@ var Signup = React.createClass({
   }
 })
 ```
+
+### Grid Form
 
 To render a form as a Bootstrap grid, you can use the provided grid components:
 
@@ -207,7 +211,7 @@ var StuffForm = forms.Form.extend({
 
 ### `Container`
 
-Renders a container.
+Renders a `.container` or `.container-fluid`.
 
 #### `Container` props
 
@@ -228,6 +232,8 @@ Renders a container.
 
 Renders a `.row`.
 
+These should be nested directly under `Container` components.
+
 #### `Row` props
 
 * `form`: `Form` - the `Form` instance to be rendered. Will be passed as a prop
@@ -246,9 +252,27 @@ Renders a `.row`.
 
 * `className`: `String` - an additional class for the container element.
 
+### `Field`
+
+Renders a column containing a named form field.
+
+These should be nested directly under `Row` components.
+
+#### `Field` props
+
+`Field` is a specialisation of `Col`, so it accepts all the sizing/offset props
+described below plus the following:
+
+* `form`: `Form` - the `Form` instance to be rendered.
+
+* `name`: `String` - the name of the field to be rendered.
+
 ### `Col`
 
-Renders a column, with whatever content you provide.
+Renders a column, with contents manually provided as its children.
+
+*Note that `Field` components generates their own column container, you do not
+need to and should not wrap a `Field` with a `Col`*
 
 #### `Col` props
 
@@ -270,19 +294,6 @@ Additionally, the column's offset can be specified with the following props:
 * `lgOffset`
 
 * `className`: `String` - an additional class for the column element.
-
-### `Field`
-
-Renders a column containing a named form field.
-
-#### `Field` props
-
-`Field` is a specialisation of `Col`, so it accepts all the sizing/offset props
-described above plus the following:
-
-* `form`: `Form` - the `Form` instance to be rendered.
-
-* `name`: `String` - the name of the field to be rendered.
 
 ## Field / Widget Patching
 
