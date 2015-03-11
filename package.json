@@ -1,37 +1,37 @@
 {
   "name": "newforms-bootstrap",
   "description": "Bootstrap integration for newforms",
-  "version": "1.1.1",
+  "version": "2.0.0",
   "main": "./lib/index.js",
   "standalone": "BootstrapForm",
   "homepage": "https://github.com/insin/newforms-bootstrap",
   "license": "MIT",
   "author": "Jonny Buchanan <jonathan.buchanan@gmail.com>",
   "dependencies": {
-    "envify": "^3.2.0"
+    "envify": "^3.3.0"
   },
   "peerDependencies": {
-    "newforms": ">=0.10.0",
-    "react": ">=0.12.0"
+    "newforms": ">=0.12.0",
+    "react": ">=0.13.0"
   },
   "devDependencies": {
-    "browserify": "^8.0.3",
-    "browserify-shim": "^3.8.2",
+    "browserify": "^9.0.3",
+    "browserify-shim": "^3.8.3",
     "del": "^1.1.1",
-    "gulp": "^3.8.10",
+    "gulp": "^3.8.11",
     "gulp-header": "^1.2.2",
-    "gulp-jshint": "^1.9.0",
-    "gulp-plumber": "^0.6.6",
-    "gulp-react": "^2.0.0",
+    "gulp-jshint": "^1.9.2",
+    "gulp-plumber": "^1.0.0",
+    "gulp-react": "^3.0.0",
     "gulp-rename": "^1.2.0",
     "gulp-streamify": "0.0.5",
-    "gulp-uglify": "^1.0.2",
-    "gulp-util": "^3.0.1",
-    "jshint-stylish": "^1.0.0",
-    "newforms": ">=0.10.0",
-    "react": ">=0.12.0",
-    "tape": "^3.0.3",
-    "vinyl-source-stream": "^1.0.0"
+    "gulp-uglify": "^1.1.0",
+    "gulp-util": "^3.0.4",
+    "jshint-stylish": "^1.0.1",
+    "newforms": ">=0.12.0",
+    "react": ">=0.13.0",
+    "tape": "^3.5.0",
+    "vinyl-source-stream": "^1.1.0"
   },
   "scripts": {
     "debug": "gulp --debug",
@@ -40,7 +40,7 @@
     "watch": "gulp"
   },
   "browserify-shim": {
-    "react/addons": "global:React",
+    "react": "global:React",
     "newforms": "global:forms"
   },
   "repository": {

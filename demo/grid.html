@@ -2,12 +2,12 @@
 <head>
   <meta charset="UTF-8">
   <title>Grid Components | newforms-bootstrap</title>
-  <script src="http://fb.me/react-with-addons-0.12.2.js"></script>
-  <script src="http://fb.me/JSXTransformer-0.12.2.js"></script>
-  <script src="../../newforms/build/newforms.js"></script>
-  <script src="../dist/newforms-bootstrap.js"></script>
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap-theme.min.css">
+   <script src="http://fb.me/react-0.13.0.js"></script>
+   <script src="http://fb.me/JSXTransformer-0.13.0.js"></script>
+   <script src="../../newforms/dist/newforms.js"></script>
+   <script src="../dist/newforms-bootstrap.js"></script>
+   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
+   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap-theme.min.css">
   <style>
   .AutoTest .row > div {
     text-align: center;
@@ -28,8 +28,8 @@
   </style>
 </head>
 <body>
-<script type="text/jsx;harmony=true">void function() {
-'use strict'
+<div id="app"></div>
+<script type="text/jsx;harmony=true">void function() { 'use strict';
 
 var {Col, Container, Row, Field} = BootstrapForm
 
@@ -54,7 +54,7 @@ var ProductForm = forms.Form.extend({
     }, 1000 + Math.random() * 1000)
   },
 
-  clean(cb) {
+  clean: ['productName', 'vendor', function(cb) {
     var {productDescription} = this.cleanedData
     if (productDescription && productDescription.toLowerCase().indexOf('clowns') != -1) {
       throw forms.ValidationError('No clowns!')
@@ -70,7 +70,7 @@ var ProductForm = forms.Form.extend({
       }
       cb(null)
     }, 1000 + Math.random() * 1000)
-  }
+  }]
 })
 
 var App = React.createClass({
@@ -296,6 +296,7 @@ var App = React.createClass({
   }
 })
 
-React.render(<App/>, document.body)
+React.render(<App/>, document.getElementById('app'))
+
 }()</script>
 </body>

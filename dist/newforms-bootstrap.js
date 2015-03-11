@@ -1,12 +1,11 @@
 /*!
- * newforms-bootstrap 1.1.1 - https://github.com/insin/newforms-bootstrap
+ * newforms-bootstrap 2.0.0 - https://github.com/insin/newforms-bootstrap
  * MIT Licensed
  */
-!function(e){if("object"==typeof exports&&"undefined"!=typeof module)module.exports=e();else if("function"==typeof define&&define.amd)define([],e);else{var o;"undefined"!=typeof window?o=window:"undefined"!=typeof global?o=global:"undefined"!=typeof self&&(o=self),o.BootstrapForm=e()}}(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
+(function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.BootstrapForm = f()}})(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 'use strict';
 
 var React = (typeof window !== "undefined" ? window.React : typeof global !== "undefined" ? global.React : null)
-var cloneWithProps = React.addons.cloneWithProps
 
 var $__0=
      
@@ -437,7 +436,7 @@ var Container = React.createClass({displayName: "Container",
       formErrors.isPopulated() && React.createElement("div", {key: form.addPrefix('__all__'), className: "alert alert-danger has-error"}, 
         formErrors.messages().map(errorMessage)
       ), 
-      React.Children.map(this.props.children, function(row, index)  {return cloneWithProps(row, {
+      React.Children.map(this.props.children, function(row, index)  {return React.cloneElement(row, {
         autoColumns: this.props.autoColumns
       , form: this.props.form
       , index: index
@@ -470,7 +469,7 @@ var Row = React.createClass({displayName: "Row",
     }
     return React.createElement("div", {className: cx('row', this.props.className)}, 
       React.Children.map(this.props.children, function(child, index)  {
-        return cloneWithProps(child, extend({
+        return React.cloneElement(child, extend({
           form: this.props.form
         , spinner: this.props.spinner
         }, columnProps[index]))

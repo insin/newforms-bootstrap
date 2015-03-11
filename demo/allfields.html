@@ -2,16 +2,16 @@
 <head>
   <meta charset="UTF-8">
   <title>All Default Fields &amp; Widgets | newforms-bootstrap</title>
-  <script src="http://fb.me/react-with-addons-0.12.2.js"></script>
-  <script src="http://fb.me/JSXTransformer-0.12.2.js"></script>
-  <script src="../../newforms/build/newforms.js"></script>
+  <script src="http://fb.me/react-0.13.0.js"></script>
+  <script src="http://fb.me/JSXTransformer-0.13.0.js"></script>
+  <script src="../../newforms/dist/newforms.js"></script>
   <script src="../dist/newforms-bootstrap.js"></script>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap-theme.min.css">
 </head>
 <body>
-<script type="text/jsx;harmony=true">void function() {
-'use strict'
+<div id="app"></div>
+<script type="text/jsx;harmony=true">void function() { 'use strict';
 
 var choices = [
   [1, 'foo']
@@ -129,6 +129,7 @@ var App = React.createClass({
   }
 })
 
-React.render(<App/>, document.body)
+React.render(<App/>, document.getElementById('app'))
+
 }()</script>
 </body>

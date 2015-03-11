@@ -1,7 +1,6 @@
 'use strict';
 
-var React = require('react/addons')
-var cloneWithProps = React.addons.cloneWithProps
+var React = require('react')
 
 var {
   BooleanField, BoundField, CheckboxChoiceInput, CheckboxFieldRenderer,
@@ -432,7 +431,7 @@ var Container = React.createClass({
       {formErrors.isPopulated() && <div key={form.addPrefix('__all__')} className="alert alert-danger has-error">
         {formErrors.messages().map(errorMessage)}
       </div>}
-      {React.Children.map(this.props.children, (row, index) => cloneWithProps(row, {
+      {React.Children.map(this.props.children, (row, index) => React.cloneElement(row, {
         autoColumns: this.props.autoColumns
       , form: this.props.form
       , index: index
@@ -465,7 +464,7 @@ var Row = React.createClass({
     }
     return <div className={cx('row', this.props.className)}>
       {React.Children.map(this.props.children, (child, index) => {
-        return cloneWithProps(child, extend({
+        return React.cloneElement(child, extend({
           form: this.props.form
         , spinner: this.props.spinner
         }, columnProps[index]))
