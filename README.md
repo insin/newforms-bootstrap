@@ -57,6 +57,9 @@ newforms' `RenderForm` component, which can also handle creation of a form
 instance for you:
 
 ```javascript
+var forms = require('newforms')
+var BootstrapForm = require('newforms-bootstrap')
+
 var SignupForm = forms.Form.extend({
   username: forms.CharField({maxLength: 20}),
   // ...
