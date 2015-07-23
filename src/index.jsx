@@ -427,7 +427,7 @@ var Container = React.createClass({
     var {form} = this.props
     patchForm(form)
     var formErrors = form.nonFieldErrors()
-    return <div className={cx(this.props.className, {'container': !this.props.fluid, 'fluid': this.props.fluid})}>
+    return <div className={cx(this.props.className, {'container': !this.props.fluid, 'container-fluid': this.props.fluid})}>
       {formErrors.isPopulated() && <div key={form.addPrefix('__all__')} className="alert alert-danger has-error">
         {formErrors.messages().map(errorMessage)}
       </div>}
