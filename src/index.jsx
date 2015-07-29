@@ -478,7 +478,12 @@ var Col = React.createClass({
 
   render() {
     return <div className={this.getColClassName()}>
-      {this.props.children}
+      {React.Children.map(this.props.children, (child, index) => {
+        return React.cloneElement(child, {
+          form: this.props.form
+        , spinner: this.props.spinner
+        })
+      })}
     </div>
   }
 })
