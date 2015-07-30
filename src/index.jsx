@@ -479,10 +479,14 @@ var Col = React.createClass({
   render() {
     return <div className={this.getColClassName()}>
       {React.Children.map(this.props.children, (child, index) => {
-        return React.cloneElement(child, {
-          form: this.props.form
-        , spinner: this.props.spinner
-        })
+        if (child.type === Row) {
+          return React.cloneElement(child, {
+            form: this.props.form
+          , spinner: this.props.spinner
+          })
+        } else {
+          return child
+        }
       })}
     </div>
   }
