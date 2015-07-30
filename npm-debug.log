@@ -1,0 +1,27 @@
+0 info it worked if it ends with ok
+1 verbose cli [ 'node', '/usr/local/bin/npm', 'run', 'dist' ]
+2 info using npm@1.4.28
+3 info using node@v0.10.38
+4 verbose node symlink /usr/local/bin/node
+5 verbose run-script [ 'predist', 'dist', 'postdist' ]
+6 info predist newforms-bootstrap@1.1.1
+7 info dist newforms-bootstrap@1.1.1
+8 verbose unsafe-perm in lifecycle true
+9 info newforms-bootstrap@1.1.1 Failed to exec dist script
+10 error newforms-bootstrap@1.1.1 dist: `gulp bundle-js --production --release && gulp bundle-js --development --release`
+10 error Exit status 127
+11 error Failed at the newforms-bootstrap@1.1.1 dist script.
+11 error This is most likely a problem with the newforms-bootstrap package,
+11 error not with npm itself.
+11 error Tell the author that this fails on your system:
+11 error     gulp bundle-js --production --release && gulp bundle-js --development --release
+11 error You can get their info via:
+11 error     npm owner ls newforms-bootstrap
+11 error There is likely additional logging output above.
+12 error System Darwin 14.4.0
+13 error command "node" "/usr/local/bin/npm" "run" "dist"
+14 error cwd /Users/seanadkinson/code/newforms-bootstrap
+15 error node -v v0.10.38
+16 error npm -v 1.4.28
+17 error code ELIFECYCLE
+18 verbose exit [ 1, true ]

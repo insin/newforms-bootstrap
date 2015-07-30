@@ -165,6 +165,13 @@ var BootstrapStaticWidget = Widget.extend({
 
 // ========================================================= Form Components ===
 
+var HorizontalPropType = React.PropTypes.shape({
+  xs: React.PropTypes.number,
+  sm: React.PropTypes.number,
+  md: React.PropTypes.number,
+  lg: React.PropTypes.number
+});
+
 var BootstrapForm = React.createClass({
   statics: {
     patchFields(form) {
@@ -200,7 +207,8 @@ var BootstrapForm = React.createClass({
   propTypes: {
     form: React.PropTypes.instanceOf(Form).isRequired,
     spinner: React.PropTypes.string,
-    static: React.PropTypes.bool
+    static: React.PropTypes.bool,
+    horizontal: HorizontalPropType
   },
 
   getDefaultProps() {
@@ -245,57 +253,180 @@ var BootstrapForm = React.createClass({
 
 var BootstrapField = React.createClass({
   propTypes: {
-    field: React.PropTypes.instanceOf(BoundField).isRequired
-  , spinner: React.PropTypes.string
-  , static: React.PropTypes.bool
+    field: React.PropTypes.instanceOf(BoundField).isRequired,
+    spinner: React.PropTypes.string,
+    static: React.PropTypes.bool,
+    horizontal: HorizontalPropType
   },
 
   getDefaultProps() {
     return {
-      spinner: SPINNER
-    }
+      spinner: SPINNER,
+      horizontal: {}
+    };
   },
 
   render() {
-    var field = this.props.field
-    var status = field.status()
-    var isBooleanField = field.field.constructor === BooleanField
-    var isFileField = field.field instanceof FileField
-    var isSpecialCaseWidget = isBooleanField || isFileField
-    var containerClasses = cx({
-      'checkbox': isBooleanField
-    , 'form-group': !isBooleanField
-    , 'has-error': status == 'error'
-    , 'has-success': status == 'valid'
-    })
-    var widgetAttrs = {attrs: {className: cx({
-      'form-control': !isFileField  &&
-                      !(field.field.widget instanceof RadioSelect) &&
-                      !(field.field.widget instanceof CheckboxSelectMultiple)
-    })}}
+    var field = this.props.field;
+    var status = field.status();
+
+    return (
+      <div className={this.getContainerClasses(field, status)}>
+        {this.getControlWithLabel(field, status)}
+        {this.getHelpText(field, status)}
+        {this.getSpinner(status)}
+        {this.getError(status)}
+      </div>
+    );
+  },
+
+  getContainerClasses(field, status) {
+    var isBooleanField = this.isBooleanField(field);
+    var isHorizontal = this.isHorizontalForm();
+    return cx({
+      'checkbox': !isHorizontal && isBooleanField,
+      'form-group': isHorizontal || !isBooleanField,
+      'has-error': status == 'error',
+      'has-success': status == 'valid'
+    });
+  },
+
+  isBooleanField(field) {
+    return field.field.constructor === BooleanField;
+  },
+
+  isFileField(field) {
+    return field.field instanceof FileField;
+  },
+
+  isRadioSelect(field) {
+    return field.field.widget instanceof RadioSelect;
+  },
+
+  isCheckboxSelectMultipleField(field) {
+    return field.field.widget instanceof CheckboxSelectMultiple;
+  },
+
+  getControlWithLabel(field) {
+
+    if (this.isBooleanField(field)) {
+      var checkbox = (
+          <label>
+            {field.asWidget()} {field.label}
+          </label>
+      );
+
+      if (!this.isHorizontalForm()) {
+        return checkbox;
+      }
+
+      return (
+        <div className={this.getHorizontalControlClasses(field)}>
+          <div className="checkbox">
+            {checkbox}
+          </div>
+        </div>
+      );
+    }
+
+    if (this.isFileField(field)) {
+      return (
+        <div>
+          {field.labelTag({attrs: {className: 'control-label ' + this.getHorizontalLabelClasses()}})}
+          <div className={this.getHorizontalControlClasses(field)}>
+            {field.asWidget(this.getWidgetAttrs(field))}
+          </div>
+        </div>
+      );
+    }
+
+    return (
+      <div>
+        {field.labelTag({attrs: {className: 'control-label ' + this.getHorizontalLabelClasses()}})}
+        <div className={this.getHorizontalControlClasses(field)}>
+          {field.asWidget(this.getWidgetAttrs(field))}
+        </div>
+      </div>
+    );
+  },
+
+  getWidgetAttrs(field) {
+    var widgetAttrs = {
+      attrs: {
+        className: cx({
+          'form-control': !this.isFileField(field)
+          && !this.isRadioSelect(field)
+          && !this.isCheckboxSelectMultipleField(field)
+        })
+      }
+    };
+
     if (this.props.static) {
       widgetAttrs.widget = field.field.widgetAttrs.staticWidget || BootstrapStaticWidget(field.field.widgetAttrs)
     }
-    // Always show help text for empty fields, regardless of status
-    var showHelpText = field.helpText && (field.isEmpty() || status == 'default')
 
-    return <div className={containerClasses}>
-      {!isBooleanField && field.labelTag({attrs: {className: 'control-label'}})}
-      {!isSpecialCaseWidget && field.asWidget(widgetAttrs)}
-      {isBooleanField && <label htmlFor={field.idForLabel()}>
-        {field.asWidget()} {field.label}
-      </label>}
-      {isFileField && <div>
-        {field.asWidget(widgetAttrs)}
-      </div>}
-      {showHelpText && field.helpTextTag({attrs: {className: 'help-block'}})}
-      {status == 'pending' && <span className="help-block">
-        <img src={this.props.spinner}/> Validating&hellip;
-      </span>}
-      {status == 'error' && field.errors().messages().map(errorMessage)}
-    </div>
+    return widgetAttrs;
+  },
+
+  getHelpText(field, status) {
+
+    // Always show help text for empty fields, regardless of status
+    var showHelpText = field.helpText && (field.isEmpty() || status == 'default');
+
+    return showHelpText && field.helpTextTag({attrs: {className: 'help-block'}});
+  },
+
+  getSpinner(status) {
+    if (status == 'pending') {
+      return (
+        <span className="help-block">
+          <img src={this.props.spinner}/> Validating&hellip;
+        </span>
+      );
+    }
+  },
+
+  getError(status) {
+    if (status == 'error') {
+      return field.errors().messages().map(errorMessage);
+    }
+  },
+
+  isHorizontalForm() {
+    return this.props.horizontal.length > 0;
+  },
+
+  getHorizontalLabelClasses() {
+    var classes = [];
+    var h = this.props.horizontal;
+
+    for (var size in h) {
+      if (h.hasOwnProperty(size)) {
+        classes.push(`col-${size}-${12-h[size]}`);
+      }
+    }
+
+    return classes.join(' ');
+  },
+
+  getHorizontalControlClasses(field) {
+    var classes = [];
+    var isBooleanField = this.isBooleanField(field);
+    var h = this.props.horizontal;
+
+    for (var size in h) {
+      if (h.hasOwnProperty(size)) {
+        classes.push(`col-${size}-${h[size]}`);
+        if (isBooleanField) {
+          classes.push(`col-${size}-offset-${12-h[size]}`);
+        }
+      }
+    }
+
+    return classes.join(' ');
   }
-})
+
+});
 
 // ========================================================= Grid Components ===
 
@@ -433,6 +564,7 @@ var Container = React.createClass({
   , fluid: React.PropTypes.bool
   , spinner: React.PropTypes.string
   , static: React.PropTypes.bool
+  , horizontal: HorizontalPropType
   },
 
   getDefaultProps() {
@@ -466,6 +598,7 @@ var Row = React.createClass({
     autoColumns: React.PropTypes.oneOf(BOOTSTRAP_COLUMN_SIZES)
   , className: React.PropTypes.string
   , static: React.PropTypes.bool
+  , horizontal: HorizontalPropType
   },
 
   render() {
@@ -506,6 +639,7 @@ var Field = React.createClass({
   propTypes: {
     name: React.PropTypes.string.isRequired
   , static: React.PropTypes.bool
+  , horizontal: HorizontalPropType
   },
 
   render() {
