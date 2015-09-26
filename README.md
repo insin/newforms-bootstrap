@@ -182,6 +182,56 @@ first grid layout example above:
 
   ![spinner](https://github.com/insin/newforms-bootstrap/raw/master/spinner.gif "Default async validation spinner")
 
+* `static` - set to `true` to render fields using a static display control: `<p className="form-control-static">{value}</p>`
+  
+  This is useful if you want to have readonly forms, and switch to editable given a flag:
+  
+  ```html
+    <BootstrapForm static={!this.props.editable} />
+  ```
+
+  Provide a `widgetAttrs.convertStatic` function on a field to convert the value when displaying statically.  The following
+  would render a cost value with a dollar sign in front when `static=true`, but would otherwise just render an integer field:
+  
+  ```javascript
+  var ProductForm = forms.Form.extend({
+    cost: forms.IntegerField({
+      widgetAttrs: {
+        convertStatic: (value) => '$' + value
+      }
+    })
+  })
+  ```
+
+* `horizontal` - An object for specifying `form-horizontal` classes.  Keys are one of the bootstrap
+  sizes (xs, sm, md, lg), and values are the number given to the form control.
+  
+  So for example:
+  
+  ```html
+    <BootstrapForm horizontal={{sm: 10}}/>
+  ```
+  
+  This would produce fields such as:
+  
+  ```html
+    <div class="form-group">
+      <label for="inputPassword3" class="col-sm-2 control-label">Password</label>
+      <div class="col-sm-10">
+        <input type="password" class="form-control" id="inputPassword3" placeholder="Password">
+      </div>
+    </div>
+    <div class="form-group">
+      <div class="col-sm-offset-2 col-sm-10">
+        <div class="checkbox">
+          <label>
+            <input type="checkbox"> Remember me
+          </label>
+        </div>
+      </div>
+    </div>
+  ```
+
 ### Bootstrap-compatible choice field renderers
 
 The following custom renderers are available for use. Note that the non-inline
