@@ -618,6 +618,7 @@ var Row = React.createClass({
         return React.cloneElement(child, extend({
         ...this.props
         ,  className: null // Don't propagate className
+        }, columnProps[index]))
       })}
     </div>
   }
