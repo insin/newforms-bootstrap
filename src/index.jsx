@@ -275,7 +275,7 @@ var BootstrapField = React.createClass({
         {this.getControlWithLabel(field, status)}
         {this.getHelpText(field, status)}
         {this.getSpinner(status)}
-        {this.getError(status)}
+        {this.getError(field, status)}
       </div>
     );
   },
@@ -386,7 +386,7 @@ var BootstrapField = React.createClass({
     }
   },
 
-  getError(status) {
+  getError(field, status) {
     if (status == 'error') {
       return field.errors().messages().map(errorMessage);
     }
