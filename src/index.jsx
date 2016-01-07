@@ -184,7 +184,7 @@ var BootstrapForm = React.createClass({
   },
 
   propTypes: {
-    form: React.PropTypes.instanceOf(Form).isRequired,
+    form: React.PropTypes.instanceOf(Form),
     spinner: React.PropTypes.string
   },
 
@@ -194,11 +194,17 @@ var BootstrapForm = React.createClass({
     }
   },
 
-  render() {
-    patchForm(this.props.form)
-    return <div>
-      {this.renderRows()}
-    </div>
+  render:function() {
+    if (this.props.form === undefined) {
+      console.error("Warning newforms-bootstrap requires to be passed between newforms.Form tags.");
+      return React.createElement("div", null, null);
+    }
+    else {
+      patchForm(this.props.form)
+      return React.createElement("div", null, 
+        this.renderRows()
+      )
+    }
   },
 
   renderRows() {
