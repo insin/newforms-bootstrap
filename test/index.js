@@ -39,20 +39,20 @@ test('BootstrapForm', function(t) {
       '</div>' +
       '<div class="form-group has-success">' +
         '<label class="control-label" for="id_username">Username:</label>' +
-        '<input type="text" name="username" class="form-control" id="id_username" value="valid">' +
+        '<input type="text" name="username" class="form-control" id="id_username" value="valid"/>' +
       '</div>' +
       '<div class="form-group has-error">' +
         '<label class="control-label" for="id_email">Email:</label>' +
-        '<input type="email" name="email" class="form-control" id="id_email" value="invalid">' +
+        '<input type="email" name="email" class="form-control" id="id_email" value="invalid"/>' +
         '<span class="help-block"><span class="glyphicon glyphicon-exclamation-sign"></span> Enter a valid email address.</span>' +
       '</div>' +
       '<div class="form-group has-success">' +
         '<label class="control-label" for="id_password">Password:</label>' +
-        '<input type="password" name="password" class="form-control" id="id_password">' +
+        '<input type="password" name="password" class="form-control" id="id_password"/>' +
       '</div>' +
       '<div class="form-group has-success">' +
         '<label class="control-label" for="id_confirm">Confirm:</label>' +
-        '<input type="password" name="confirm" class="form-control" id="id_confirm">' +
+        '<input type="password" name="confirm" class="form-control" id="id_confirm"/>' +
       '</div>' +
     '</div>'
   , 'Basic rendering'
