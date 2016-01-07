@@ -184,6 +184,7 @@ var BootstrapForm = React.createClass({
   },
 
   propTypes: {
+    form: React.PropTypes.instanceOf(Form),
     spinner: React.PropTypes.string
   },
 
